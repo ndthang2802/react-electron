@@ -19,6 +19,6 @@ from qlks import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^api/authentication/$', views.authentication),
-    re_path(r'^api/view/$', views.view)
+    re_path(r'^api/token/$', views.view)
 
 ]
