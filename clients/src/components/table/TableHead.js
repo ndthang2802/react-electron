@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import propTypes from 'prop-types'
 import { TableHead,TableRow, TableCell, Checkbox,TableSortLabel } from '@material-ui/core';
 export default function TableHeader(props){
@@ -29,7 +29,7 @@ export default function TableHeader(props){
                                 direction={orderBy === CellHeader.label ? order : "asc"}
                                 onClick={createSortHandler(CellHeader.label)}
                                 >
-                                {CellHeader.label}
+                                <b>{CellHeader.label.toUpperCase()}</b>
                                 {orderBy === CellHeader.label ? (
                                     <span className={styles.visuallyHidden}>
                                     {order === "desc" ? "sorted descending" : "sorted ascending"}

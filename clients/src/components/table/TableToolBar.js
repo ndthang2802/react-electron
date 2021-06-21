@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Toolbar,Typography,Tooltip, IconButton } from '@material-ui/core';
 import {FilterList} from '@material-ui/icons';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -6,7 +6,7 @@ import { TableToolBarStyles } from './styles';
 import propTypes from 'prop-types'
 import clsx from 'clsx';
 export default function TableToolBar(props){
-    const {numberSelected} = props
+    const {numberSelected,tableName} = props
     const header_styles = TableToolBarStyles()
     return (
         <Toolbar className={clsx(header_styles.root,{[header_styles.highlight]: numberSelected > 0})}>
@@ -14,7 +14,7 @@ export default function TableToolBar(props){
                 numberSelected > 0 ?
                 (<Typography  className={header_styles.title} color="inherit" variant='h5' component='div' >{numberSelected} selected</Typography>) 
                 :
-                (<Typography  className={header_styles.title} variant='h5' component='div' >Invoices</Typography>)
+                (<Typography  className={header_styles.title} variant='h5' component='div' >{tableName}</Typography>)
             }
             {numberSelected > 0 ? 
                 (

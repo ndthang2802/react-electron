@@ -5,7 +5,7 @@ import TrendingUpOutlinedIcon from '@material-ui/icons/TrendingUpOutlined';
 import WidgetsOutlinedIcon from '@material-ui/icons/WidgetsOutlined';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import LocalAtmOutlinedIcon from '@material-ui/icons/LocalAtmOutlined';
-import React, { useState } from 'react';
+import React from 'react';
 export default function Dashboard(props){
 
     const Clicked = (e) => {
@@ -29,17 +29,13 @@ export default function Dashboard(props){
                 <VpnKeyIcon className='negativeZIndex' />
                 <span className='negativeZIndex' >&nbsp;&nbsp;Bookings</span>
             </Box>
-            <Box id='calendar' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
+            <Box id='room' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
                 <EventNoteIcon className='negativeZIndex' />
-                <span className='negativeZIndex'>&nbsp;&nbsp;Calendar</span>
+                <span className='negativeZIndex'>&nbsp;&nbsp;Room</span>
             </Box>
-            <Box id='rate' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
-                <TrendingUpOutlinedIcon className='negativeZIndex' />
-                <span className='negativeZIndex' >&nbsp;&nbsp;Rates</span>
-            </Box>
-            <Box id='unit' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
+            <Box id='service' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
                 <LocalAtmOutlinedIcon className='negativeZIndex' />
-                <span className='negativeZIndex' >&nbsp;&nbsp;Units</span>
+                <span className='negativeZIndex' >&nbsp;&nbsp;Service</span>
             </Box>
             <Box id='invoice' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
                 <DescriptionOutlinedIcon className='negativeZIndex' />

@@ -1,36 +1,138 @@
-import {Box} from '@material-ui/core'
-
-export default function SideBar(){
-
+import {Box,List,ListSubheader,ListItem,ListItemIcon,ListItemText,makeStyles} from '@material-ui/core'
+import {AttachMoney,MoneyOff} from '@material-ui/icons';
+import React,{useState} from 'react';
+import AddBookings from './dialog/addBooking';
+const SideBarStyle = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      maxWidth: 360,
+      backgroundColor: theme.palette.background.paper,
+    },
+    nested: {
+      paddingLeft: theme.spacing(4),
+    },
+    container: {
+        display:'flex',
+        flexDirection:'column',
+        flexWrap:'wrap',
+        width:'100%',
+        height:'100vh',
+        paddingTop : '.8rem'
+    }
+  }));
+export function BookingSideBar(){
+    const classes = SideBarStyle()
+    const [open,setOpen] = useState(false)
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
     return (
-        <Box display='flex' flexDirection='column' flexWrap='wrap' width='100%' height='100vh' boxShadow={2}>
-            <Box width='85%' className='hover_left' display='flex' flexDirection='row' justifyContent='space-between'>
-                <span>Unconfirmed bookings</span>
-                <span>...</span>
+        <React.Fragment>
+            <Box className={classes.container} boxShadow={2}>
+                <Box width='100%' display='flex' flexDirection='row' justifyContent='center'>
+                    <List
+                        component="nav"
+                        aria-labelledby="nested-list-subheader"
+                        subheader={
+                            <ListSubheader component="div" id="nested-list-subheader" style={{'fontSize':'1.2rem'}}>
+                            <b>Control</b>
+                            </ListSubheader>
+                        }
+                        className={classes.root}
+                        >
+                        <ListItem button className='hover_left' onClick={handleClickOpen} >
+                            <ListItemIcon>
+                            <AttachMoney />
+                            </ListItemIcon>
+                            <ListItemText primary="Add Booking" />
+                        </ListItem>
+                        <ListItem button className='hover_left' >
+                            <ListItemIcon>
+                            <MoneyOff />
+                            </ListItemIcon>
+                            <ListItemText primary="Add service" />
+                        </ListItem>
+                    </List>
+                </Box>
             </Box>
-            <Box width='85%' className='hover_left' display='flex' flexDirection='row' justifyContent='space-between'>
-                <span>Current bookings</span>
-                <span>...</span>
-            </Box>
-            <Box width='85%' className='hover_left' display='flex' flexDirection='row' justifyContent='space-between'>
-                <span>Coming up</span>
-                <span>...</span>
-            </Box>
-            <Box width='85%' className='hover_left' display='flex' flexDirection='row' justifyContent='space-between'>
-                <span>Past bookings</span>
-                <span>...</span>
-            </Box>
-            <Box width='85%' className='hover_left' display='flex' flexDirection='row' justifyContent='space-between'>
-                <span>Canceled</span>
-                <span>...</span>
-            </Box>
-            <Box width='85%' className='hover_left' display='flex' flexDirection='row' justifyContent='space-between'>
-                <span>Reminders/Alerts</span>
-                <span>...</span>
+            <AddBookings handleClose={handleClose} open={open} />
+        </React.Fragment>
+    )
+}
+export function InvoiceSideBar(props){
+    const classes = SideBarStyle()
+    const {setFilter} = props
+    return (
+        <Box className={classes.container} boxShadow={2}>
+            <Box width='100%'>
+                <List
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <ListSubheader component="div" id="nested-list-subheader" style={{'fontSize':'1.2rem'}}>
+                        <b>Filter</b>
+                        </ListSubheader>
+                    }
+                    className={classes.root}
+                    >
+                    <ListItem button className='hover_left'>
+                        <ListItemIcon>
+                        <AttachMoney />
+                        </ListItemIcon>
+                        <ListItemText primary="Staff name" />
+                    </ListItem>
+                    <ListItem button className='hover_left'>
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Date" />
+                    </ListItem>
+                </List>
             </Box>
         </Box>
-
     )
+}
 
-
+export function RoomSideBar(props){
+    const classes = SideBarStyle()
+    const {setFilter} = props
+    return (
+        <Box className={classes.container} boxShadow={2} >
+            <Box width='100%' >
+                <List
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <ListSubheader component="div" id="nested-list-subheader" style={{'fontSize':'1.2rem'}}>
+                        <b>Options</b>
+                        </ListSubheader>
+                    }
+                    className={classes.root}
+                    >
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <AttachMoney />
+                        </ListItemIcon>
+                        <ListItemText primary="Category 1" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Category 2" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Category 3" />
+                    </ListItem>
+                </List>
+            </Box>
+        </Box>
+    )
 }
