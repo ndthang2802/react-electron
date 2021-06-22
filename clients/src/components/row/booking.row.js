@@ -1,6 +1,7 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {TableRow,TableCell,Checkbox,Collapse,Typography, Box,Table,TableBody,TableHead,makeStyles,List,ListItem,ListItemText} from '@material-ui/core'
 import {ExpandLessOutlined,ExpandMoreOutlined} from '@material-ui/icons';
+import BookingApi from '../../apiCall/booking.api';
 /*
 row = {
     id : int,
@@ -30,8 +31,27 @@ const styles = makeStyles((theme)=> ({
         cursor: 'pointer'
     }
 })) 
-function ClientInfo(props){
-    const {expanded,style,idClient} = props
+function MoreInfo(props){
+    const {expanded,style,info,row} = props
+    const [infoShow,setInfoShow] = useState()
+    const getMoreInfo = async() =>{
+        try {
+            if (info === 'client'){
+                var res = await BookingApi.getClientInfo(row.id)
+                setInfoShow(res)
+            }
+            else if (info === 'room'){
+                var res = await BookingApi.getRoomInfo(row.id)
+                setInfoShow(res)
+            }
+        } 
+        catch (e){
+            console.log(e)
+        }
+    }
+    useEffect(()=>{
+        getMoreInfo()
+    },[info])
     return (
         <TableRow className={style.root}>
             <TableCell colSpan='100%' style={{ paddingBottom: 0, paddingTop: 0 }} >
@@ -48,10 +68,19 @@ function ClientInfo(props){
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell>id</TableCell>
-                                    <TableCell>{idClient}</TableCell>
-                                </TableRow>
+                                {
+                                    infoShow ? 
+                                     Object.keys(infoShow[0]).map((key,index)=>{
+                                         return (
+                                             <TableRow key={index}>
+                                                 <TableCell>{key}</TableCell>
+                                                 <TableCell>{infoShow[0][key]}</TableCell>
+                                             </TableRow>
+                                         )
+                                     })
+                                    :
+                                    <TableRow><TableCell>waiting....</TableCell></TableRow>
+                                }
                             </TableBody>
                         </Table>
                     </Box>
@@ -64,9 +93,12 @@ function ClientInfo(props){
 export default function BookingRow(props){
     const style = styles() 
     const [expanded,setExpanded] = useState(false)
+    const [info,setInfo] = useState()
     const {row,handleClick,isItemSelected,labelId,Headers} = props
     const onClickShow = (e) =>{
         setExpanded(!expanded)
+        if (e.target.id === 'open')
+            setInfo(e.target.parentNode.id)
     }
     return (
         <React.Fragment>
@@ -86,16 +118,16 @@ export default function BookingRow(props){
             {
                Headers.map((Header,index)=>{
                 return (
-                        <TableCell component="th" id={labelId} scope="row" style={{'padding':'1'}} align="right" key={row[Header]} >
+                        <TableCell component="th" id={labelId} scope="row" style={{'padding':'1'}} align="right" key={index} >
                             {
-                                index !== 0 ? 
+                                !['client','room'].includes(Header)  ? 
                                 <Typography component={'div'} >{row[Header].toString()}</Typography>
                                 :
-                                <Box display='flex' flexWrap='wrap' justifyContent='flex-end' >
+                                <Box display='flex' flexWrap='wrap' justifyContent='flex-end' id={Header} >
                                     <span style={{'padding':'0 1rem'}} >{row[Header].toString()}</span>
                                     {expanded ? 
-                                    <ExpandLessOutlined onClick={onClickShow} className={style.hover} /> : 
-                                    <ExpandMoreOutlined onClick={onClickShow} className={style.hover} /> }
+                                    <ExpandLessOutlined onClick={onClickShow} className={style.hover} id = 'close' /> : 
+                                    <ExpandMoreOutlined onClick={onClickShow} className={style.hover} id = 'open'/> }
                                 </Box>
                             }
                         </TableCell>
@@ -104,7 +136,7 @@ export default function BookingRow(props){
             })
             }
         </TableRow>
-        <ClientInfo expanded={expanded} idClient={row['idclient']} style={style} />
+        <MoreInfo expanded={expanded} info={info} row={row} style={style} />
         </React.Fragment>
     )
 }

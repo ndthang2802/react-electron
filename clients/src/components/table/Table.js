@@ -13,14 +13,13 @@ import BookingRow from '../row/booking.row';
 
 export default function EnhancedTable(props) {
     const styles = TableStyles()
-    const {data,Headers,tableName} = props 
+    const {data,Headers,tableName,selected,setSelected} = props 
     const CellHeaders = generateCellHead(data[0],Headers)
     const [order, setOrder] = useState("asc");
     const [orderBy, setOrderBy] = useState(Headers[0]);
-    const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const handleSelectAllClick = (event) => {
       if (event.target.checked) {
         const newSelecteds = data.map((n) => n[Object.keys(n)[1]]);

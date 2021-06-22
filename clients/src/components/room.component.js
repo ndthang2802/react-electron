@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import EnhancedTable from './table/Table'
 import {RoomSideBar} from './sidebar.component'
 import { Grid } from '@material-ui/core';
@@ -282,13 +282,14 @@ function prepareRoomRenderData(data){
 export default function Rooms(){
     const Headers = ['number','floor','name','isAvailable','price','notes']
     const data_render = prepareRoomRenderData(data)
+    const [selected, setSelected] = useState([]);
     return (
         <React.Fragment>
           <Grid container item xs={4} sm={2}>
             <RoomSideBar  />
           </Grid>
           <Grid container item xs={12} sm={10}>
-            <EnhancedTable data={data_render} Headers={Headers} tableName='Rooms' ></EnhancedTable>
+            <EnhancedTable data={data_render} Headers={Headers} tableName='Rooms' selected={selected} setSelected={setSelected} ></EnhancedTable>
           </Grid>
         </React.Fragment>
     )
