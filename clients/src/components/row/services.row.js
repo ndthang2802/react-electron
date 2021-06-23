@@ -1,5 +1,23 @@
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 import {TableRow,TableCell,Checkbox,Collapse,Typography,Box,Table,TableBody,TableHead,makeStyles,} from "@material-ui/core";
+=======
+import {
+  TableRow,
+  TableCell,
+  Checkbox,
+  Collapse,
+  Typography,
+  Box,
+  Table,
+  TableBody,
+  TableHead,
+  makeStyles,
+  List,
+  ListItem,
+  ListItemText,
+} from "@material-ui/core";
+>>>>>>> 75bd21af3168348976426efac8bbb59f99d7a6ee
 import { ExpandLessOutlined, ExpandMoreOutlined } from "@material-ui/icons";
 import ServiceApiCall from "../../apiCall/service.api";
 
@@ -99,7 +117,11 @@ export default function ServiceRow(props) {
     <React.Fragment>
       <TableRow
         hover
+<<<<<<< HEAD
         onClick={(event) => handleClick(event, row)}
+=======
+        onClick={(event) => handleClick(event, row[Object.keys(row)[1]])}
+>>>>>>> 75bd21af3168348976426efac8bbb59f99d7a6ee
         role="checkbox"
         aria-checked={isItemSelected}
         tabIndex={-1}

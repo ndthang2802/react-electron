@@ -135,8 +135,15 @@ export function RoomSideBar(props){
         </Box>
     )
 }
+<<<<<<< HEAD
 export function ServiceSideBar(props){
     const classes = SideBarStyle()
+=======
+
+export function ServiceSideBar(props){
+    const classes = SideBarStyle()
+    const {setFilter} = props
+>>>>>>> 75bd21af3168348976426efac8bbb59f99d7a6ee
     return (
         <Box className={classes.container} boxShadow={2} >
             <Box width='100%' >
