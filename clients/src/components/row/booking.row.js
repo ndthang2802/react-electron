@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from 'react';
-import {TableRow,TableCell,Checkbox,Collapse,Typography, Box,Table,TableBody,TableHead,makeStyles,List,ListItem,ListItemText} from '@material-ui/core'
+import {TableRow,TableCell,Checkbox,Collapse,Typography, Box,Table,TableBody,TableHead,makeStyles,CircularProgress} from '@material-ui/core'
 import {ExpandLessOutlined,ExpandMoreOutlined} from '@material-ui/icons';
 import BookingApi from '../../apiCall/booking.api';
 /*
@@ -79,7 +79,7 @@ function MoreInfo(props){
                                          )
                                      })
                                     :
-                                    <TableRow><TableCell>waiting....</TableCell></TableRow>
+                                    <TableRow><TableCell colSpan={2}><CircularProgress/></TableCell></TableRow>
                                 }
                             </TableBody>
                         </Table>
@@ -92,13 +92,31 @@ function MoreInfo(props){
 
 export default function BookingRow(props){
     const style = styles() 
+    const [clientExpanded,setClientExpanded] = useState(false)
+    const [roomExpanded,setRoomExpanded] = useState(false)
     const [expanded,setExpanded] = useState(false)
     const [info,setInfo] = useState()
     const {row,handleClick,isItemSelected,labelId,Headers} = props
     const onClickShow = (e) =>{
-        setExpanded(!expanded)
-        if (e.target.id === 'open')
-            setInfo(e.target.parentNode.id)
+        setExpanded(true)
+        if (e.target.parentNode.id === 'client'){
+            setClientExpanded(true)
+            setRoomExpanded(false)
+        }
+        else { 
+            setClientExpanded(false)
+            setRoomExpanded(true)
+        }
+        setInfo(e.target.parentNode.id)
+    }
+    const onClickClose = (e) =>{
+        if (e.target.parentNode.id === 'client'){
+            setClientExpanded(false)
+        }
+        else{
+            setRoomExpanded(false)
+        }
+        setInfo('')
     }
     return (
         <React.Fragment>
@@ -124,10 +142,19 @@ export default function BookingRow(props){
                                 <Typography component={'div'} >{row[Header].toString()}</Typography>
                                 :
                                 <Box display='flex' flexWrap='wrap' justifyContent='flex-end' id={Header} >
-                                    <span style={{'padding':'0 1rem'}} >{row[Header].toString()}</span>
-                                    {expanded ? 
-                                    <ExpandLessOutlined onClick={onClickShow} className={style.hover} id = 'close' /> : 
-                                    <ExpandMoreOutlined onClick={onClickShow} className={style.hover} id = 'open'/> }
+                                    <Typography>{row[Header].toString()}</Typography>
+                                    {
+                                        Header === 'client' ?
+                                        clientExpanded ?
+                                            <span id={Header}><ExpandLessOutlined onClick={onClickClose} className={style.hover} className='icon_hover_bottom' /></span>
+                                            : 
+                                            <span id={Header}><ExpandMoreOutlined onClick={onClickShow} className={style.hover} className='icon_hover_bottom' /> </span>
+                                        :
+                                        roomExpanded ?
+                                            <span id={Header}><ExpandLessOutlined onClick={onClickClose} className={style.hover} className='icon_hover_bottom' /></span>
+                                            : 
+                                            <span id={Header}><ExpandMoreOutlined onClick={onClickShow} className={style.hover} className='icon_hover_bottom' /> </span>
+                                    }
                                 </Box>
                             }
                         </TableCell>
@@ -136,7 +163,7 @@ export default function BookingRow(props){
             })
             }
         </TableRow>
-        <MoreInfo expanded={expanded} info={info} row={row} style={style} />
+        {info ? <MoreInfo expanded={expanded}  info={info} row={row} style={style} /> : null}
         </React.Fragment>
     )
 }

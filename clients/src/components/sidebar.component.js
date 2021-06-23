@@ -1,5 +1,5 @@
 import {Box,List,ListSubheader,ListItem,ListItemIcon,ListItemText,makeStyles} from '@material-ui/core'
-import {AttachMoney,MoneyOff} from '@material-ui/icons';
+import {AttachMoney,MoneyOff,RoomServiceOutlined} from '@material-ui/icons';
 import React,{useState} from 'react';
 import AddBookings from './dialog/addBooking';
 const SideBarStyle = makeStyles((theme) => ({
@@ -52,7 +52,7 @@ export function BookingSideBar(){
                         </ListItem>
                         <ListItem button className='hover_left' >
                             <ListItemIcon>
-                            <MoneyOff />
+                            <RoomServiceOutlined />
                             </ListItemIcon>
                             <ListItemText primary="Add service" />
                         </ListItem>

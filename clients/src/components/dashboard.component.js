@@ -25,7 +25,7 @@ export default function Dashboard(props){
                 <WidgetsOutlinedIcon className='negativeZIndex' />
                 <span className='negativeZIndex'>&nbsp;&nbsp;Dashboard</span>
             </Box>
-            <Box id='bookings' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
+            <Box id='bookings' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom dashboard_focus' onClick={Clicked}>
                 <VpnKeyIcon className='negativeZIndex' />
                 <span className='negativeZIndex' >&nbsp;&nbsp;Bookings</span>
             </Box>

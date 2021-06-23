@@ -25,3 +25,9 @@
   color: rgb(40, 173, 218);
   border-bottom: 2px solid rgb(40, 173, 218);
 }
+
+.icon_hover_bottom:hover {
+  color: rgb(40, 173, 218);
+  border-bottom: 2px solid rgb(40, 173, 218);
+  cursor: pointer;
+}

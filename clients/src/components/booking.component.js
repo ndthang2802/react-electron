@@ -1,9 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import EnhancedTable from './table/Table'
 import {BookingSideBar} from './sidebar.component'
-import { Grid } from '@material-ui/core';
+import { Grid ,CircularProgress} from '@material-ui/core';
 import BookingApi from '../apiCall/booking.api'
-
 // function prepareBookingRenderData(data){
 //     var data_handle = []
 //     data.map((item)=>{
@@ -53,7 +52,7 @@ export default function Bookings(){
               rentalInfo ?
               <EnhancedTable data={rentalInfo} Headers={Headers} tableName='Bookings' selected={selected} setSelected={setSelected} ></EnhancedTable>
               : 
-              <div>waiting...</div>
+              <CircularProgress />
             } 
           </Grid>
         </React.Fragment>
