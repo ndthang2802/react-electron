@@ -23,7 +23,7 @@ export default function EnhancedTable(props) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const handleSelectAllClick = (event) => {
       if (event.target.checked) {
-        const newSelecteds = data.map((n) => n[Object.keys(n)[1]]);
+        const newSelecteds = data.map((n) => n);
         setSelected(newSelecteds);
         return;
       }
@@ -87,7 +87,7 @@ export default function EnhancedTable(props) {
                             stableSort(data, getComparator(order, orderBy))
                               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                               .map((row, index) => {
-                                const isItemSelected = isSelected(row[Object.keys(row)[1]]);
+                                const isItemSelected = isSelected(row);
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
                                   tableName === 'Invoices' ?
