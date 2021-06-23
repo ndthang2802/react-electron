@@ -97,7 +97,7 @@ export default function InvoiceRow(props){
         <React.Fragment>
         <TableRow
             hover
-            onClick={(event) => handleClick(event, row[Object.keys(row)[1]])}
+            onClick={(event) => handleClick(event, row)}
             role="checkbox"
             aria-checked={isItemSelected}
             tabIndex={-1}

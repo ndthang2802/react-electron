@@ -16,12 +16,13 @@ const SideBarStyle = makeStyles((theme) => ({
         flexDirection:'column',
         flexWrap:'wrap',
         width:'100%',
-        height:'100vh',
+        height:'100%',
         paddingTop : '.8rem'
     }
   }));
-export function BookingSideBar(){
+export function BookingSideBar(props){
     const classes = SideBarStyle()
+    const {roomSelected} = props
     const [open,setOpen] = useState(false)
     const handleClickOpen = () => {
       setOpen(true);
@@ -59,13 +60,12 @@ export function BookingSideBar(){
                     </List>
                 </Box>
             </Box>
-            <AddBookings handleClose={handleClose} open={open} />
+            <AddBookings handleClose={handleClose} roomSelected={roomSelected} open={open} />
         </React.Fragment>
     )
 }
 export function InvoiceSideBar(props){
     const classes = SideBarStyle()
-    const {setFilter} = props
     return (
         <Box className={classes.container} boxShadow={2}>
             <Box width='100%'>
@@ -99,7 +99,6 @@ export function InvoiceSideBar(props){
 
 export function RoomSideBar(props){
     const classes = SideBarStyle()
-    const {setFilter} = props
     return (
         <Box className={classes.container} boxShadow={2} >
             <Box width='100%' >
@@ -130,6 +129,50 @@ export function RoomSideBar(props){
                         <MoneyOff />
                         </ListItemIcon>
                         <ListItemText primary="Category 3" />
+                    </ListItem>
+                </List>
+            </Box>
+        </Box>
+    )
+}
+export function ServiceSideBar(props){
+    const classes = SideBarStyle()
+    return (
+        <Box className={classes.container} boxShadow={2} >
+            <Box width='100%' >
+                <List
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <ListSubheader component="div" id="nested-list-subheader" style={{'fontSize':'1.2rem'}}>
+                        <b>SERVICE</b>
+                        </ListSubheader>
+                    }
+                    className={classes.root}
+                    >
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <AttachMoney />
+                        </ListItemIcon>
+                        <ListItemText primary="Add" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Delete" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Update" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Filter" />
                     </ListItem>
                 </List>
             </Box>

@@ -92,12 +92,11 @@ const data = [
 
 export default function Invoice(){
     const Headers = ['id','published','price','paid']
-    const [filter,setFilter] = useState('')
     const [selected, setSelected] = useState([]);
     return (
         <React.Fragment>
           <Grid container item xs={4} sm={2}>
-            <InvoiceSideBar setFilter={setFilter} />
+            <InvoiceSideBar  />
           </Grid>
           <Grid container item xs={12} sm={10}>
             <EnhancedTable data={data} Headers={Headers} tableName='Invoices' selected={selected} setSelected={setSelected} ></EnhancedTable>
