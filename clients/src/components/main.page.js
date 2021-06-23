@@ -3,7 +3,7 @@ import Dashboard from './dashboard.component'
 import React, { useState} from 'react';
 import Bookings from './booking.component'
 import Rooms from './room.component'
-
+import Services from "./services.component"
 import Invoice from './invoice.component'
 export default function MainPage(){
     
@@ -12,7 +12,8 @@ export default function MainPage(){
     const list = {
         'bookings' : <Bookings />,
         'invoice' : <Invoice />,
-        'room'    : <Rooms />
+        'room'    : <Rooms />,
+        'service' : <Services/>
     }
     return (
         <Box>
