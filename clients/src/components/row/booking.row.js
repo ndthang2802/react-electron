@@ -2,25 +2,6 @@ import React,{useEffect, useState} from 'react';
 import {TableRow,TableCell,Checkbox,Collapse,Typography, Box,Table,TableBody,TableHead,makeStyles,CircularProgress} from '@material-ui/core'
 import {ExpandLessOutlined,ExpandMoreOutlined} from '@material-ui/icons';
 import BookingApi from '../../apiCall/booking.api';
-/*
-row = {
-    id : int,
-    floor: date/time,
-    number: string,
-    category: {
-        id:int,
-        name: string,
-        price: string,
-        notes: string,
-    }
-    status:{
-        id:int,
-        title:string,
-        isAvailabel: bool,
-        notes: string
-    }
-}
-*/
 const styles = makeStyles((theme)=> ({
     root: {
         '& > *': {
@@ -51,7 +32,7 @@ function MoreInfo(props){
     }
     useEffect(()=>{
         getMoreInfo()
-    },[info])
+    },[])
     return (
         <TableRow className={style.root}>
             <TableCell colSpan='100%' style={{ paddingBottom: 0, paddingTop: 0 }} >
@@ -122,7 +103,7 @@ export default function BookingRow(props){
         <React.Fragment>
         <TableRow
             hover
-            onClick={(event) => handleClick(event, row[Object.keys(row)[1]])}
+            onClick={(event) => handleClick(event, row)}
             role="checkbox"
             aria-checked={isItemSelected}
             tabIndex={-1}

@@ -19,5 +19,16 @@ class BookingApiCall{
     getRoomInfo(idrental){
         return fetch(`https://fake-api-nnn.herokuapp.com/api/roomrentals/${idrental}/rooms`).then(data=>data.json())
     }
+    addBooking(input){
+        return fetch("url", {
+              method: "POST",
+              body: JSON.stringify(input),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+              .then(response => response.json())
+              .catch(error => error);
+    }
 }
 export default new BookingApiCall()
