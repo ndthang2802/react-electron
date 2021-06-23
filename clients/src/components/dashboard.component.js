@@ -15,7 +15,7 @@ export default function Dashboard(props){
         props.setRender(e.target.id);
         document.getElementById(e.target.id).classList.add('dashboard_focus')
     }
-
+    
     return (
         <Box display='flex' flexDirection='row' flexWrap='wrap' width='100%' boxShadow={2}>
             <Box width='18%' display='flex' flexWrap='wrap' alignItems='center'>

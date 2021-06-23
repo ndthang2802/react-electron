@@ -9,6 +9,7 @@ import { generateCellHead,stableSort,getComparator} from './tableFunction';
 import InvoiceRow from '../row/invoice.row';
 import RoomRow from '../row/room.row';
 import BookingRow from '../row/booking.row';
+import ServiceRow from '../row/services.row';
 
 
 export default function EnhancedTable(props) {
@@ -91,7 +92,9 @@ export default function EnhancedTable(props) {
                                 return (
                                   tableName === 'Invoices' ?
                                     <InvoiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
-                                  : 
+                                  : tableName === 'Services' ?
+                                  <ServiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                  :
                                   <BookingRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                 );
                               })}

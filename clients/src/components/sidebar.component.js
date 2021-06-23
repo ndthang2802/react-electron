@@ -136,3 +136,49 @@ export function RoomSideBar(props){
         </Box>
     )
 }
+
+export function ServiceSideBar(props){
+    const classes = SideBarStyle()
+    const {setFilter} = props
+    return (
+        <Box className={classes.container} boxShadow={2} >
+            <Box width='100%' >
+                <List
+                    component="nav"
+                    aria-labelledby="nested-list-subheader"
+                    subheader={
+                        <ListSubheader component="div" id="nested-list-subheader" style={{'fontSize':'1.2rem'}}>
+                        <b>SERVICE</b>
+                        </ListSubheader>
+                    }
+                    className={classes.root}
+                    >
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <AttachMoney />
+                        </ListItemIcon>
+                        <ListItemText primary="Add" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Delete" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Update" />
+                    </ListItem>
+                    <ListItem button className='hover_left' >
+                        <ListItemIcon>
+                        <MoneyOff />
+                        </ListItemIcon>
+                        <ListItemText primary="Filter" />
+                    </ListItem>
+                </List>
+            </Box>
+        </Box>
+    )
+}
