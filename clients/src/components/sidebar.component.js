@@ -1,12 +1,14 @@
 import {Box,List,ListSubheader,ListItem,ListItemIcon,ListItemText,makeStyles} from '@material-ui/core'
-import {AttachMoney,MoneyOff,RoomServiceOutlined} from '@material-ui/icons';
+import {AttachMoney,MoneyOff,RoomServiceOutlined,BorderColorOutlined} from '@material-ui/icons';
 import React,{useState} from 'react';
 import AddBookings from './dialog/addBooking';
+import EditBookings from './dialog/editBooking';
 const SideBarStyle = makeStyles((theme) => ({
     root: {
       width: '100%',
       maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
+      backgroundColor: theme.palette.background.paper
+      
     },
     nested: {
       paddingLeft: theme.spacing(4),
@@ -16,25 +18,34 @@ const SideBarStyle = makeStyles((theme) => ({
         flexDirection:'column',
         flexWrap:'wrap',
         width:'100%',
+        minHeight:'100vh',
         height:'100%',
-        paddingTop : '.8rem'
+        paddingTop : '.8rem',
     }
   }));
 export function BookingSideBar(props){
     const classes = SideBarStyle()
-    const {roomSelected} = props
-    const [open,setOpen] = useState(false)
-    const handleClickOpen = () => {
-      setOpen(true);
+    const {roomSelected,bookingSelected} = props
+    const [openAddBooking,setOpenAddBooking] = useState(false)
+    const [openEditBooking,setOpenEditBooking] = useState(false)
+    const AddBookingOpen = () => {
+        setOpenAddBooking(true);
     };
   
-    const handleClose = () => {
-      setOpen(false);
+    const AddBookingClose = () => {
+        setOpenAddBooking(false);
+    };
+    const EditBookingOpen = () => {
+        setOpenEditBooking(true);
+    };
+  
+    const EditBookingClose = () => {
+        setOpenEditBooking(false);
     };
     return (
         <React.Fragment>
             <Box className={classes.container} boxShadow={2}>
-                <Box width='100%' display='flex' flexDirection='row' justifyContent='center'>
+                <Box width='100%' display='flex' flexDirection='row' justifyContent='center' position='sticky' top='0'>
                     <List
                         component="nav"
                         aria-labelledby="nested-list-subheader"
@@ -45,7 +56,7 @@ export function BookingSideBar(props){
                         }
                         className={classes.root}
                         >
-                        <ListItem button className='hover_left' onClick={handleClickOpen} >
+                        <ListItem button className='hover_left' onClick={AddBookingOpen} >
                             <ListItemIcon>
                             <AttachMoney />
                             </ListItemIcon>
@@ -57,10 +68,17 @@ export function BookingSideBar(props){
                             </ListItemIcon>
                             <ListItemText primary="Add service" />
                         </ListItem>
+                        <ListItem button className='hover_left' onClick={EditBookingOpen} >
+                            <ListItemIcon>
+                            <BorderColorOutlined />
+                            </ListItemIcon>
+                            <ListItemText primary="Update Booking" />
+                        </ListItem>
                     </List>
                 </Box>
             </Box>
-            <AddBookings handleClose={handleClose} roomSelected={roomSelected} open={open} />
+            <AddBookings handleClose={AddBookingClose} roomSelected={roomSelected} open={openAddBooking} />
+            <EditBookings handleClose={EditBookingClose} bookingSelected={bookingSelected} open={openEditBooking} />
         </React.Fragment>
     )
 }
@@ -135,15 +153,10 @@ export function RoomSideBar(props){
         </Box>
     )
 }
-<<<<<<< HEAD
-export function ServiceSideBar(props){
-    const classes = SideBarStyle()
-=======
 
 export function ServiceSideBar(props){
     const classes = SideBarStyle()
     const {setFilter} = props
->>>>>>> 75bd21af3168348976426efac8bbb59f99d7a6ee
     return (
         <Box className={classes.container} boxShadow={2} >
             <Box width='100%' >

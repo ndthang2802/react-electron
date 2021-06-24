@@ -1,4 +1,4 @@
-import React,{ useReducer, useState } from 'react';
+import React,{ useEffect, useReducer, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -6,9 +6,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import {TextField,Grid,makeStyles,Box,Typography,Table,TableHead,TableBody,TableRow,TableCell } from '@material-ui/core';
-import {CloseOutlined,MonetizationOnOutlined} from '@material-ui/icons';
+import {CloseOutlined,MonetizationOnOutlined,BackspaceOutlined} from '@material-ui/icons';
 import DatePickers from './DatePickers';
-import { ValidateAddBooking } from '../function/validate.addBooking';
+import { ValidateAddBooking,hasError } from '../function/validate.addBooking';
+import ClientApiCall from '../../apiCall/client.api'
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -44,6 +45,12 @@ const useStyles = makeStyles(theme => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  dialogTitle:{
+    width:'100%',
+    display:'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   dialogContent:{
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
@@ -68,6 +75,7 @@ function getRoomFloorBook(listBooked){
     }
     return rooms
 }
+
 export default function AddBookings(props) {
   const {open,handleClose,roomSelected} = props
   const classes = useStyles()
@@ -88,40 +96,81 @@ export default function AddBookings(props) {
       checkOutAt: getDay()
     }
   );
-  const [error,setError] = useState([])
+  const clearAll = () =>{
+    setFormInput({name:''})
+    setFormInput({email:''})
+    setFormInput({phone:''})
+    setFormInput({identify:''})
+  }
+  useEffect(()=>{
+    clearAll()
+  },[open])
+  const [error,setError] = useState({phone: '',name:'',identify:'',email:'',StartAt:'',checkOutAt:''})
   const handleSubmit = evt => {
     evt.preventDefault();
-    let data = { formInput };
-    let stat = ValidateAddBooking(formInput)
-    if (stat[0]){
-      console.log(data)
-      //call post here
-      Object.keys(formInput).map((key)=>{
-        if (key === 'StartAt' | key === 'checkOutAt' | key==='rooms'){
-          const newValue = getDay()
-          setFormInput({[key]:newValue})
-        }
-        else{
-          setFormInput({[key]:''})
-        }
-      })
-    }
-    else {
-      setError(stat[1])
+    const data = {formInput}
+    let E = ValidateAddBooking(data)
+    if (E.length) setError({...error,[E.key]:E.value})
+    else{
+      if(!hasError(error)){
+        console.log(data)
+        //post here
+        Object.keys(formInput).map((key)=>{
+          if (key === 'StartAt' | key === 'checkOutAt'){
+            const newValue = getDay()
+            setFormInput({[key]:newValue})
+          }
+          else{
+            setFormInput({[key]:''})
+          }
+        })
+      }
     }
   };
-  const handleInput = evt => {
-    setError('')
-    const name = evt.target.name;
-    const newValue = evt.target.value;
+  const handleInput = async evt => {
+    const name = evt.target.name
+    setError({...error,[name]:''})
+    let newValue = evt.target.value;
+    if (name==='phone'){
+      if (newValue.length > 12 | !newValue.match(/\d/g)){
+        setError({...error,[name]:'Invalid phone number.'})
+      } 
+      if(newValue.length === 12){
+        var s = await ClientApiCall.getClientInfoByPhone(newValue)
+        if (s.length){
+          setFormInput({name:s[0].fullname})
+          setFormInput({email:s[0].emailAddress})
+          setFormInput({identify:s[0].identityCardNo})
+        }
+      }
+    }
+    if (name==='identify'){
+      if (newValue.length > 9 | !newValue.match(/\d/g)){
+        setError({...error,[name]:'Invalid identify.'})
+      } 
+    }
     setFormInput({ [name]: newValue });
   };
   const handleChoose = (e) => {
-    setError('')
     const name = e.target.name
+    setError({...error,[name]:''})
     const newValue = e.target.value
+    if (name==='StartAt'){
+      if (new Date(newValue) < new Date()){
+        setError({...error,[name]:'Check in must greater than today.'})
+      } 
+    }
+    if (name==='checkOutAt'){
+      if (new Date(newValue) < new Date()){
+        setError({...error,[name]:'Check in must greater than today.'})
+      }
+      else if (new Date(formInput.StartAt) > new Date(newValue)){
+        setError({...error,[name]:'Check out must greater or equal today.'})
+      } 
+    }
     setFormInput({ [name]: newValue })
   }
+  
   return (
     <div>
       <Dialog
@@ -136,55 +185,68 @@ export default function AddBookings(props) {
       {
         roomSelected.length ?
         <React.Fragment>
-            <DialogTitle id="alert-dialog-slide-title"><b>Add Bookings</b></DialogTitle>
+            <DialogTitle id="alert-dialog-slide-title">
+              <Box className={classes.dialogTitle}>
+              <b>Add Bookings</b>
+              <Button variant="outlined" color="secondary" onClick={clearAll} >Clear&nbsp;&nbsp;<BackspaceOutlined/></Button>
+              </Box>
+            </DialogTitle>
             <DialogContent dividers={true} className={classes.dialogContent} >
             <form onSubmit={handleSubmit} className={classes.form} >
               <Grid container spacing={5}>
                 <Grid container item xs={12} sm={6}>
                   <TextField
-                    label="Name"
-                    id="margin-normal"
-                    name="name"
-                    value={formInput.name}
-                    className={classes.textField}
-                    onChange={handleInput}
-                  />
-                </Grid>
-                <Grid container item xs={12} sm={6}>
-                  <TextField
-                    label="Email"
-                    id="margin-normal"
-                    name="email"
-                    value={formInput.email}
-                    className={classes.textField}
-                    onChange={handleInput}
-                  />
-                </Grid>
-                <Grid container item xs={12} sm={6}>
-                  <TextField
+                    error ={error.phone !== '' ? true : false}
                     label="Phone"
                     id="margin-normal"
                     name="phone"
                     value={formInput.phone}
                     className={classes.textField}
                     onChange={handleInput}
+                    helperText={error.phone}
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
                   <TextField
+                    error={error.email !== '' ? true : false}
+                    label="Email"
+                    id="margin-normal"
+                    name="email"
+                    value={formInput.email}
+                    className={classes.textField}
+                    onChange={handleInput}
+                    helperText={error.email}
+                  />
+                </Grid>
+                <Grid container item xs={12} sm={6}>
+                  <TextField
+                    error={error.name !== '' ? true : false}
+                    label="Name"
+                    id="margin-normal"
+                    name="name"
+                    value={formInput.name}
+                    className={classes.textField}
+                    onChange={handleInput}
+                    helperText={error.name}
+                  />
+                </Grid>
+                <Grid container item xs={12} sm={6}>
+                  <TextField
+                    error={error.identify !== '' ? true : false}
                     label="Identify"
                     id="margin-normal"
                     name="identify"
                     value={formInput.identify}
                     className={classes.textField}
                     onChange={handleInput}
+                    helperText={error.identify}
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check in'} name='StartAt' handleChoose={handleChoose} selectedDate={formInput.StartAt}/>
+                  <DatePickers label={'Check in'} name='StartAt' error={error.StartAt} handleChoose={handleChoose} selectedDate={formInput.StartAt}/>
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check out'} name='checkOutAt' handleChoose={handleChoose} selectedDate={formInput.checkOutAt} />
+                  <DatePickers label={'Check out'} name='checkOutAt' error={error.checkOutAt} handleChoose={handleChoose} selectedDate={formInput.checkOutAt} />
                 </Grid>
                 <Grid container item xs={12} sm={11}>
                   <Table>
@@ -208,9 +270,6 @@ export default function AddBookings(props) {
                 </Grid>
               </Grid>
             </form>
-            {
-              error ? <Typography color='secondary' component='div' >{error}</Typography> : null
-            }
             <Box></Box>
             </DialogContent>
         </React.Fragment>

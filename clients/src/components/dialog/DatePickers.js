@@ -16,10 +16,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DatePickers(props) {
   const classes = useStyles();
-  const {label,name,handleChoose,selectedDate} = props
+  const {label,name,handleChoose,selectedDate,error} = props
   return (
     <Box className={classes.container} noValidate>
       <TextField
+        error ={error !== '' ? true : false}
         id="date"
         label={label}
         type="date"
@@ -30,6 +31,7 @@ export default function DatePickers(props) {
         InputLabelProps={{
           shrink: true,
         }}
+        helperText={error}
       />
     </Box>
   );

@@ -16,7 +16,7 @@ export default function MainPage(){
         'service' : <Services/>
     }
     return (
-        <Box>
+        <Box> 
             <Grid container spacing={1} >
                 <Grid container item xs={12}>
                     <Dashboard render={render} setRender={setRender} ></Dashboard>

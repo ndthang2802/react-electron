@@ -1,27 +1,30 @@
 export function ValidateAddBooking(input){
-    var checkin = new Date(input.StartAt)
-    var checkout = new Date(input.checkOutAt)
-    var today = new Date()
-    if (checkin < today){
-        return [false,'Check in must be greater or equal today']
+    if (!input.name){
+        return {key:'name',value:'Name is empty'}
     }
-    else if (checkout < today ){
-        return [false,'Check out must greater or equal today']
+    if (!input.phone){
+        return {key:'phone',value:'Phone is empty'}
     }
-    else if (checkout < checkin){
-        return [false,'Check out must greater or equal checkin']
+    if (!input.email){
+        return {key: 'email',value :'Email is empty'}
     }
-    else if (!input.name){
-        return [false,'Name is empty']
+    if (!input.identify){
+        return {key : 'identify',value: 'Identify is empty'}
     }
-    else if (!input.phone){
-        return [false,'Phone is empty']
+    if (input.identify.length < 9){
+        return {key : 'identify',value: 'Invali identify'}
     }
-    else if (!input.email){
-        return [false,'Email is empty']
+    if (!input.phone.match(/\d/g).length===12){
+        return {key:'phone',value:'Invalid phone number'}
     }
-    else if (!input.identify){
-        return [false,'Identify is empty']
-    }
-    return [true]
+    return true
+}
+
+export function hasError(error){
+    Object.keys(error).map((key)=>{
+        if (error[key] != ''){
+            return true
+        }
+    })
+    return false
 }
