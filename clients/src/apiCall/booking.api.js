@@ -30,5 +30,8 @@ class BookingApiCall{
               .then(response => response.json())
               .catch(error => error);
     }
+    getUnpaidBooking(){
+        
+    }
 }
 export default new BookingApiCall()

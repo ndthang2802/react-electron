@@ -4,29 +4,8 @@ import {BookingSideBar} from './sidebar.component'
 import { Grid ,CircularProgress} from '@material-ui/core';
 import BookingApi from '../apiCall/booking.api'
 import RoomApiCall from '../apiCall/room.api';
-// function prepareBookingRenderData(data){
-//     var data_handle = []
-//     data.map((item)=>{
-//         var item_handle  = {}
-//         Object.keys(item).map((key)=>{
-//            if (typeof(item[key]) !== 'object' ) {
-//              item_handle[key] = item[key]
-//            }
-//            else {
-//              Object.keys(item[key]).map((_)=>{
-//                if (key === 'client' & _ === 'id'){
-//                 item_handle['idclient'] = item[key][_]
-//                }
-//                else item_handle[_] = item[key][_]
-//              })
-//            }
-//         })
-//         data_handle.push(item_handle)
-//     })
-//     return data_handle
-// }
+
 export default function Bookings(){
-    // api call Room Rentals
     const [rentalInfo,setRentalInfo] = useState()
     const [emptyRoomInfo,setEmptyRoomInfo] = useState()
     const dataCalling = async ()  =>{

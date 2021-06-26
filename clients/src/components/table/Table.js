@@ -93,9 +93,9 @@ export default function EnhancedTable(props) {
                                   tableName === 'Invoices' ?
                                     <InvoiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                   : tableName === 'Services' ?
-                                  <ServiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                    <ServiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                   :
-                                  <BookingRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                    <BookingRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                 );
                               })}
                             {emptyRows > 0 && (

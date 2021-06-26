@@ -10,6 +10,7 @@ import {CloseOutlined,MonetizationOnOutlined,BackspaceOutlined} from '@material-
 import DatePickers from './DatePickers';
 import { ValidateAddBooking,hasError } from '../function/validate.addBooking';
 import ClientApiCall from '../../apiCall/client.api'
+import BookingApiCall from '../../apiCall/booking.api';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -63,54 +64,56 @@ const useStyles = makeStyles(theme => ({
     gap:'2rem'
   }
 }));
-function getRoomFloorBook(listBooked){
-    var rooms = []
-    for (var item of listBooked){
-      rooms.push({
-        id : item.id,
-        room: item.room,
-        floor: item.floor,
-        category: item.category
-      })
-    }
-    return rooms
-}
-
 export default function EditBookings(props) {
   const {open,handleClose,bookingSelected} = props
   const classes = useStyles()
-  //const infoBooked = getRoomFloorBook(bookingSelected)
   const getDay = () =>{
     const today = new Date()
     return today.toISOString().split('T')[0]
   }
-  const [formInput, setFormInput] = useReducer(
+  const [clientInfo, setclientInfo] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
-      name: bookingSelected[0].client,
+      name: "",
       email: "",
       phone:"",
       identify:"",
-      rooms:{bookingSelected}
+      StartAt:"",
+      checkOutAt:""
     }
   );
+  const fillIn = async () => {
+    if (open) {
+      var info = await ClientApiCall.getClientInfoById(bookingSelected[0].client)
+      setclientInfo({name:info[0].fullname})
+      setclientInfo({email:info[0].emailAddress})
+      setclientInfo({identify:info[0].identityCardNo})
+      setclientInfo({phone:info[0].phoneNo})
+      setclientInfo({StartAt:bookingSelected[0].StartAt})
+      setclientInfo({checkOutAt:bookingSelected[0].checkOutAt})
+      console.log(clientInfo)
+    }
+  }
+  useEffect(()=>{
+    fillIn()
+  },[open])
   const [error,setError] = useState({phone: '',name:'',identify:'',email:'',StartAt:'',checkOutAt:''})
   const handleSubmit = evt => {
     evt.preventDefault();
-    const data = {formInput}
+    const data = {clientInfo}
     let E = ValidateAddBooking(data)
     if (E.length) setError({...error,[E.key]:E.value})
     else{
       if(!hasError(error)){
         console.log(data)
         //post here
-        Object.keys(formInput).map((key)=>{
+        Object.keys(clientInfo).map((key)=>{
           if (key === 'StartAt' | key === 'checkOutAt'){
             const newValue = getDay()
-            setFormInput({[key]:newValue})
+            setclientInfo({[key]:newValue})
           }
           else{
-            setFormInput({[key]:''})
+            setclientInfo({[key]:''})
           }
         })
       }
@@ -120,25 +123,7 @@ export default function EditBookings(props) {
     const name = evt.target.name
     setError({...error,[name]:''})
     let newValue = evt.target.value;
-    if (name==='phone'){
-      if (newValue.length > 12 | !newValue.match(/\d/g)){
-        setError({...error,[name]:'Invalid phone number.'})
-      } 
-      if(newValue.length === 12){
-        var s = await ClientApiCall.getClientInfoByPhone(newValue)
-        if (s.length){
-          setFormInput({name:s[0].fullname})
-          setFormInput({email:s[0].emailAddress})
-          setFormInput({identify:s[0].identityCardNo})
-        }
-      }
-    }
-    if (name==='identify'){
-      if (newValue.length > 9 | !newValue.match(/\d/g)){
-        setError({...error,[name]:'Invalid identify.'})
-      } 
-    }
-    setFormInput({ [name]: newValue });
+    setclientInfo({ [name]: newValue });
   };
   const handleChoose = (e) => {
     const name = e.target.name
@@ -153,11 +138,11 @@ export default function EditBookings(props) {
       if (new Date(newValue) < new Date()){
         setError({...error,[name]:'Check in must greater than today.'})
       }
-      else if (new Date(formInput.StartAt) > new Date(newValue)){
+      else if (new Date(clientInfo.StartAt) > new Date(newValue)){
         setError({...error,[name]:'Check out must greater or equal today.'})
       } 
     }
-    setFormInput({ [name]: newValue })
+    setclientInfo({ [name]: newValue })
   }
   
   return (
@@ -182,17 +167,22 @@ export default function EditBookings(props) {
             <DialogContent dividers={true} className={classes.dialogContent} >
             <form onSubmit={handleSubmit} className={classes.form} >
               <Grid container spacing={5}>
+              <Grid container item xs={12}>
+                <Typography variant='h5' >Client's infomation</Typography>
+              </Grid>
                 <Grid container item xs={12} sm={6}>
                   <TextField
                     error ={error.phone !== '' ? true : false}
                     label="Phone"
                     id="margin-normal"
                     name="phone"
-                    value={formInput.phone}
+                    value={clientInfo.phone}
                     className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.phone}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
+                  
                 </Grid>
                 <Grid container item xs={12} sm={6}>
                   <TextField
@@ -200,10 +190,11 @@ export default function EditBookings(props) {
                     label="Email"
                     id="margin-normal"
                     name="email"
-                    value={formInput.email}
+                    value={clientInfo.email}
                     className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.email}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
@@ -212,10 +203,11 @@ export default function EditBookings(props) {
                     label="Name"
                     id="margin-normal"
                     name="name"
-                    value={formInput.name}
+                    value={clientInfo.name}
                     className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.name}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
@@ -224,17 +216,44 @@ export default function EditBookings(props) {
                     label="Identify"
                     id="margin-normal"
                     name="identify"
-                    value={formInput.identify}
+                    value={clientInfo.identify}
                     className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.identify}
+                    InputProps={{
+                      readOnly: true,
+                    }}
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check in'} name='StartAt' error={error.StartAt} handleChoose={handleChoose} selectedDate={formInput.StartAt}/>
+                  <TextField
+                    error={error.identify !== '' ? true : false}
+                    label="Check in"
+                    id="margin-normal"
+                    name="StartAt"
+                    value={clientInfo.StartAt}
+                    className={classes.textField}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </Grid>
+                <Grid container item xs={12}>
+                  <Typography variant='h5' >Update</Typography>
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check out'} name='checkOutAt' error={error.checkOutAt} handleChoose={handleChoose} selectedDate={formInput.checkOutAt} />
+                  <DatePickers label={'Check out'} name='checkOutAt' error={error.checkOutAt} handleChoose={handleChoose} selectedDate={clientInfo.checkOutAt} />
+                </Grid>
+                <Grid container item xs={12} sm={2}>
+                  <TextField
+                    error={error.identify !== '' ? true : false}
+                    label="Room"
+                    id="margin-normal"
+                    name="room"
+                    value='room'
+                    className={classes.textField}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
                 </Grid>
               </Grid>
             </form>

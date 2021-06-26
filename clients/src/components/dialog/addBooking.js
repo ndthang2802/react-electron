@@ -132,10 +132,10 @@ export default function AddBookings(props) {
     setError({...error,[name]:''})
     let newValue = evt.target.value;
     if (name==='phone'){
-      if (newValue.length > 12 | !newValue.match(/\d/g)){
+      if (newValue.length > 10 | !newValue.match(/\d/g)){
         setError({...error,[name]:'Invalid phone number.'})
       } 
-      if(newValue.length === 12){
+      if(newValue.length === 10){
         var s = await ClientApiCall.getClientInfoByPhone(newValue)
         if (s.length){
           setFormInput({name:s[0].fullname})
