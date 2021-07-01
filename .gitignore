@@ -1,7 +1,5 @@
 *.exe
 clients/node_modules/
 node_modules/
-server_test/
-clients/src/components_Nhat
 SE104.L23/
 test.js
