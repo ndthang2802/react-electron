@@ -1,11 +1,12 @@
 import React, { useState ,useRef } from 'react';
-
 import {Box,Input,InputLabel,FormControl, Button } from '@material-ui/core'
+import AuthApiCall from '../apiCall/auth.api'
 
 export default function Login_Page(props){
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
     const [error,setError] = useState('')
+    const {setToken} = props
     const formRef = useRef()
 
     const onChanging = (e) => {
@@ -16,22 +17,15 @@ export default function Login_Page(props){
     const handleSubmit = async (e) => {
         e.preventDefault();
         formRef.current.reset();
-        const response = await fetch('http://127.0.0.1:8000/api/authentication/',{   // server_test
-            method : 'POST',
-            credentials:'include',
-            headers : {
-                'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: JSON.stringify({username,password})
-        })
-
-        if (response.status === 403 ){
+        let response = await AuthApiCall.getToken({username,password})
+        if (response.status === 200){
+            response = await response.json()
+        }
+        else if (response.status === 403){
             setError('Invalid username or password')
         }
-        else if (response.status === 200){
-            props.setLoginStatus(true)
-        }
-        
+        setToken(response['access_token'])
+
     }
 
     return (

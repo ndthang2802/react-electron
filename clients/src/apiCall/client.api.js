@@ -1,6 +1,6 @@
 class ClientApiCall{
     async getClientInfoByPhone(phone){
-        let res = await fetch(`https://fake-api-nnn.herokuapp.com/api/clients?phoneNo=${phone}`)
+        let res = await fetch(`http://localhost:8000/api/client/${phone}/`)
         return await res.json()
     }
     async getClientInfoById(id){

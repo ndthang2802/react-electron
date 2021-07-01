@@ -1,23 +1,13 @@
+import {getCookie} from '../components/function/getCookie'
 class BookingApiCall{
-    getById(id){
-        var url = 'url'+`?id=${id}`
-        return fetch(url)
-    }
-    update(data){
-
-    }
-    getAvailable(){
-        var url = 'url'+'status=available'
-        return fetch(url)
-    }
-    getAll(){
-        return fetch('https://fake-api-nnn.herokuapp.com/api/roomrentals').then(data=>data.json())
-    }
-    getClientInfo(idrental){
-        return fetch(`https://fake-api-nnn.herokuapp.com/api/roomrentals/${idrental}/clients`).then(data=>data.json())
-    }
-    getRoomInfo(idrental){
-        return fetch(`https://fake-api-nnn.herokuapp.com/api/roomrentals/${idrental}/rooms`).then(data=>data.json())
+    async getAll(){
+        var token = 'Token ' + getCookie('access_token')
+        return await fetch('http://127.0.0.1:8000/api/renderbooking/',{
+            headers:{
+                'Authorization': token,
+                'Content-Type':'application/json',
+            }
+        }) //.then(data=>data.json())
     }
     addBooking(input){
         return fetch("url", {
@@ -29,9 +19,6 @@ class BookingApiCall{
             })
               .then(response => response.json())
               .catch(error => error);
-    }
-    getUnpaidBooking(){
-        
     }
 }
 export default new BookingApiCall()

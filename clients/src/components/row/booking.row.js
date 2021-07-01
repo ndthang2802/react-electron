@@ -1,7 +1,8 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect,useState} from 'react';
 import {TableRow,TableCell,Checkbox,Collapse,Typography, Box,Table,TableBody,TableHead,makeStyles,CircularProgress} from '@material-ui/core'
 import {ExpandLessOutlined,ExpandMoreOutlined} from '@material-ui/icons';
-import BookingApi from '../../apiCall/booking.api';
+import ClientApi from '../../apiCall/client.api';
+import RoomApiCall from '../../apiCall/room.api';
 const styles = makeStyles((theme)=> ({
     root: {
         '& > *': {
@@ -9,30 +10,12 @@ const styles = makeStyles((theme)=> ({
         },
     },
     hover:{
-        cursor: 'pointer'
+        cursor: 'pointer',
     }
 })) 
 function MoreInfo(props){
-    const {expanded,style,info,row} = props
-    const [infoShow,setInfoShow] = useState()
-    const getMoreInfo = async() =>{
-        try {
-            if (info === 'client'){
-                var res = await BookingApi.getClientInfo(row.id)
-                setInfoShow(res)
-            }
-            else if (info === 'room'){
-                var res = await BookingApi.getRoomInfo(row.id)
-                setInfoShow(res)
-            }
-        } 
-        catch (e){
-            console.log(e)
-        }
-    }
-    useEffect(()=>{
-        getMoreInfo()
-    },[])
+    const {expanded,style,infoShow} = props
+   
     return (
         <TableRow className={style.root}>
             <TableCell colSpan='100%' style={{ paddingBottom: 0, paddingTop: 0 }} >
@@ -73,14 +56,40 @@ function MoreInfo(props){
 
 export default function BookingRow(props){
     const style = styles() 
+
+    // icon show less and icon show more
     const [clientExpanded,setClientExpanded] = useState(false)
     const [roomExpanded,setRoomExpanded] = useState(false)
+
+    // expand dialog
     const [expanded,setExpanded] = useState(false)
-    const [info,setInfo] = useState()
+    // parent's prop
     const {row,handleClick,isItemSelected,labelId,Headers} = props
+    // used for reduce duplicated calling
+    const [dup,setDup] = useState('')
+    //api call for more infomation
+    const [infoShow,setInfoShow] = useState()
+    const getMoreInfo = async(info) =>{
+        try {
+            if (info === 'name'){
+                // more client's info
+                var res = await ClientApi.getClientInfoByPhone(row.phone)
+                setInfoShow(res)
+            }
+            else if (info === 'number'){
+                // more room's info
+                var res = await RoomApiCall.getRoomById(row.id_room)
+                setInfoShow(res)
+            }
+        } 
+        catch (e){
+            console.log(e)
+        }
+    }
+
     const onClickShow = (e) =>{
         setExpanded(true)
-        if (e.target.parentNode.id === 'client'){
+        if (e.target.parentNode.id === 'name'){
             setClientExpanded(true)
             setRoomExpanded(false)
         }
@@ -88,16 +97,22 @@ export default function BookingRow(props){
             setClientExpanded(false)
             setRoomExpanded(true)
         }
-        setInfo(e.target.parentNode.id)
+        //
+        setDup(e.target.parentNode.id)
     }
+
+    // reduce duplicate calling
+    useEffect(()=>{
+        getMoreInfo(dup)
+    },[dup])
     const onClickClose = (e) =>{
-        if (e.target.parentNode.id === 'client'){
+        if (e.target.parentNode.id === 'name'){
             setClientExpanded(false)
         }
         else{
             setRoomExpanded(false)
         }
-        setInfo('')
+        setExpanded(false)
     }
     return (
         <React.Fragment>
@@ -117,15 +132,15 @@ export default function BookingRow(props){
             {
                Headers.map((Header,index)=>{
                 return (
-                        <TableCell component="th" id={labelId} scope="row" style={{'padding':'1'}} align="right" key={index} >
+                        <TableCell component="th" id={labelId} scope="row" style={{padding:'1'}} align="right" key={index} >
                             {
-                                !['client','room'].includes(Header)  ? 
+                                !['name','number'].includes(Header)  ? 
                                 <Typography component={'div'} >{row[Header].toString()}</Typography>
                                 :
                                 <Box display='flex' flexWrap='wrap' justifyContent='flex-end' id={Header} >
                                     <Typography>{row[Header].toString()}</Typography>
                                     {
-                                        Header === 'client' ?
+                                        Header === 'name' ?
                                         clientExpanded ?
                                             <span id={Header}><ExpandLessOutlined onClick={onClickClose} className={style.hover} className='icon_hover_bottom' /></span>
                                             : 
@@ -144,7 +159,7 @@ export default function BookingRow(props){
             })
             }
         </TableRow>
-        {info ? <MoreInfo expanded={expanded}  info={info} row={row} style={style} /> : null}
+        {expanded ? <MoreInfo expanded={expanded}  infoShow={infoShow} row={row} style={style} /> : null}
         </React.Fragment>
     )
 }

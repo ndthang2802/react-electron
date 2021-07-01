@@ -4,6 +4,8 @@ import {BookingSideBar} from './sidebar.component'
 import { Grid ,CircularProgress} from '@material-ui/core';
 import BookingApi from '../apiCall/booking.api'
 import RoomApiCall from '../apiCall/room.api';
+import AuthApiCall from '../apiCall/auth.api';
+
 
 export default function Bookings(){
     const [rentalInfo,setRentalInfo] = useState()
@@ -11,7 +13,10 @@ export default function Bookings(){
     const dataCalling = async ()  =>{
         try {
             var res = await BookingApi.getAll()
+            res= await res.json()
             setRentalInfo(res)
+            var r = await AuthApiCall.refreshToken()
+            console.log(r)
         } 
         catch (e){
             console.log(e)
@@ -19,7 +24,7 @@ export default function Bookings(){
     }
     const emptyRoomCalling = async () => {
       try {
-        var res = await RoomApiCall.getAllEmptyRoom()
+        var res = await RoomApiCall.getAllAvailableRooms()
         setEmptyRoomInfo(res)
       } 
       catch (e){
@@ -30,11 +35,11 @@ export default function Bookings(){
       dataCalling()
       emptyRoomCalling()
     },[])
-    //
+
     const [selected, setSelected] = useState([]);
     const [emptySelected, setEmptySelected] = useState([]);
-    const Headers = ['client','StartAt','checkOutAt','room']
-    const RoomHeaders = ['category','status','floor','room']
+    const Headers = ['name','phone','Start_at','Check_out_at','floor','number']
+    const RoomHeaders = ['Category','Price','Floor','Number']
     return (
         <React.Fragment>
           <Grid container item xs={4} sm={2}>

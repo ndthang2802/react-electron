@@ -1,38 +1,19 @@
 import Login_Page from './components/login.page'
-import React, { useState,useEffect } from 'react';
+import React from 'react';
 import MainPage from './components/main.page'
 import './App.css'
+import useToken from './components/useToken';
 function App() {
-  const [loginStatus,setLoginStatus] = useState(false)
-  
-  useEffect( ()=>{
-    async function fetchData() {
-      const response = await fetch('http://127.0.0.1:8000/api/token/',{   // server_test
-              method: 'GET',
-              credentials:'include'
-          })
-      if (response.status === 200){
-        setLoginStatus(true)
-      }
-    }
-    fetchData()
-  },[loginStatus])
-
-
-  if (loginStatus){
+  const { token, setToken } = useToken();
+  if (token){
     return (
       <MainPage></MainPage>
     )
   }
-
   else 
     return (
       <div className="App">
-      
-          <Login_Page setLoginStatus={setLoginStatus}>
-
-          </Login_Page>
-    
+          <Login_Page setToken={setToken} />
       </div>
     );
 }
