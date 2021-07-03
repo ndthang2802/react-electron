@@ -18,26 +18,27 @@ function MoreInfo(props) {
   const { expanded, style, info, row } = props;
   const [infoShow, setInfoShow] = useState();
 
-  const getMoreInfo = async() =>{
-    try {
-        if (info === 'serviceType'){
-            let res = await ServiceApiCall.getServiceTypeInfo(row.id)
-            console.log(res)
-            setInfoShow(res)
-        }
-        else if (info === 'rental'){
-            let res = await ServiceApiCall.getRoomInfo(row.id)
-            console.log(res)
-            setInfoShow(res)
-        }
-    } 
-    catch (e){
-        console.log(e)
-    }
-}
+  
   useEffect(()=>{
+    const getMoreInfo = async() =>{
+      try {
+          if (info === 'serviceType'){
+              let res = await ServiceApiCall.getServiceTypeInfo(row.id)
+              console.log(res)
+              setInfoShow(res)
+          }
+          else if (info === 'rental'){
+              let res = await ServiceApiCall.getRoomInfo(row.id)
+              console.log(res)
+              setInfoShow(res)
+          }
+      } 
+      catch (e){
+          console.log(e)
+      }
+    }
     getMoreInfo()
-},[info])
+  },[info,row.id])
 return (
     <TableRow className={style.root}>
         <TableCell colSpan='100%' style={{ paddingBottom: 0, paddingTop: 0 }} >
@@ -87,20 +88,10 @@ export default function ServiceRow(props) {
     if (e.target.id === "open") setInfo(e.target.parentNode.id);
   
   };
-  function convert(string_) {
-    if (string_ === "Type service") return "serviceType";
-    if (string_ === "Room Rental") return "rental";
-    if (string_ === "Created At") return "createdAt";
-    if (string_ === "Canceled") return "isCanceled";
-    if (string_ === "Quantity") return "quantity";
-    if (string_ === "Total") return "sub_total";
-    if (string_ === "Detail") return "detail";
-  }
   return (
     <React.Fragment>
       <TableRow
         hover
-        onClick={(event) => handleClick(event, row)}
         onClick={(event) => handleClick(event, row)}
         role="checkbox"
         aria-checked={isItemSelected}
@@ -116,7 +107,6 @@ export default function ServiceRow(props) {
           />
         </TableCell>
         {Headers.map((Header, index) => {
-          let key_ = convert(Header);
           return (
             <TableCell
               component="th"

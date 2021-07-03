@@ -4,7 +4,6 @@ import {BookingSideBar} from './sidebar.component'
 import { Grid ,CircularProgress} from '@material-ui/core';
 import BookingApi from '../apiCall/booking.api'
 import RoomApiCall from '../apiCall/room.api';
-import AuthApiCall from '../apiCall/auth.api';
 
 
 export default function Bookings(){
@@ -13,10 +12,7 @@ export default function Bookings(){
     const dataCalling = async ()  =>{
         try {
             var res = await BookingApi.getAll()
-            res= await res.json()
             setRentalInfo(res)
-            var r = await AuthApiCall.refreshToken()
-            console.log(r)
         } 
         catch (e){
             console.log(e)

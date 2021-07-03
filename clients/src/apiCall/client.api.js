@@ -1,11 +1,23 @@
+import {getCookie} from '../components/function/getCookie'
+import AuthApiCall from './auth.api'
+import Cookies from 'js-cookie'
 class ClientApiCall{
     async getClientInfoByPhone(phone){
-        let res = await fetch(`http://localhost:8000/api/client/${phone}/`)
-        return await res.json()
-    }
-    async getClientInfoById(id){
-        let res = await fetch(`https://fake-api-nnn.herokuapp.com/api/clients?id=${id}`)
-        return await res.json()
+        var token = 'Token ' + getCookie('access_token')
+        var res = await fetch(`http://127.0.0.1:8000/api/client/${phone}/`,{
+            headers:{
+                'Authorization': token,
+                'Content-Type':'application/json',
+            }
+        }) 
+        if (res.status === 403){
+            await AuthApiCall.refreshToken()
+            return this.getClientInfoByPhone(phone)
+        }
+        if (res.status === 200){
+            res = await res.json()
+            return res
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-import Login_Page from './components/login.page'
+import LoginPage from './components/login.page'
 import React from 'react';
 import MainPage from './components/main.page'
 import './App.css'
@@ -13,7 +13,7 @@ function App() {
   else 
     return (
       <div className="App">
-          <Login_Page setToken={setToken} />
+          <LoginPage setToken={setToken} />
       </div>
     );
 }

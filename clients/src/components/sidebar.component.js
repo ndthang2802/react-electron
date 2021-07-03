@@ -3,6 +3,7 @@ import {AttachMoney,MoneyOff,RoomServiceOutlined,BorderColorOutlined} from '@mat
 import React,{useState} from 'react';
 import AddBookings from './dialog/addBooking';
 import EditBookings from './dialog/editBooking';
+import Warning from './dialog/warning';
 const SideBarStyle = makeStyles((theme) => ({
     root: {
       width: '100%',
@@ -28,19 +29,30 @@ export function BookingSideBar(props){
     const {roomSelected,bookingSelected} = props
     const [openAddBooking,setOpenAddBooking] = useState(false)
     const [openEditBooking,setOpenEditBooking] = useState(false)
+    const [openWarning,setOpenWarning] = useState(false)
     const AddBookingOpen = () => {
-        setOpenAddBooking(true);
+        if (roomSelected.length)
+            setOpenAddBooking(true);
+        else
+            setOpenWarning(true)
+        
     };
   
     const AddBookingClose = () => {
         setOpenAddBooking(false);
     };
     const EditBookingOpen = () => {
-        setOpenEditBooking(true);
+        if (bookingSelected.length)
+            setOpenEditBooking(true);
+        else
+            setOpenWarning(true)
     };
   
     const EditBookingClose = () => {
         setOpenEditBooking(false);
+    };
+    const WarningClose = () => {
+        setOpenWarning(false);
     };
     return (
         <React.Fragment>
@@ -77,8 +89,9 @@ export function BookingSideBar(props){
                     </List>
                 </Box>
             </Box>
-            <AddBookings handleClose={AddBookingClose} roomSelected={roomSelected} open={openAddBooking} />
-            <EditBookings handleClose={EditBookingClose} bookingSelected={bookingSelected} open={openEditBooking} />
+                <AddBookings handleClose={AddBookingClose} roomSelected={roomSelected} open={openAddBooking} />
+                <EditBookings handleClose={EditBookingClose}  bookingSelected={bookingSelected} open={openEditBooking} />
+                <Warning handleClose={WarningClose} open={openWarning}></Warning>
         </React.Fragment>
     )
 }
@@ -156,7 +169,6 @@ export function RoomSideBar(props){
 
 export function ServiceSideBar(props){
     const classes = SideBarStyle()
-    const {setFilter} = props
     return (
         <Box className={classes.container} boxShadow={2} >
             <Box width='100%' >

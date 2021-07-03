@@ -17,4 +17,6 @@ urlpatterns = [
     #get room by id
     re_path(r'^room/(?P<id>[a-zA-Z0-9]+)/$', views.getRoomById ),
 
+    
+
 ]

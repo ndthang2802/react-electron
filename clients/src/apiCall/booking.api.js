@@ -1,24 +1,43 @@
 import {getCookie} from '../components/function/getCookie'
+import AuthApiCall from './auth.api'
+import Cookies from 'js-cookie'
 class BookingApiCall{
     async getAll(){
         var token = 'Token ' + getCookie('access_token')
-        return await fetch('http://127.0.0.1:8000/api/renderbooking/',{
+        var res = await fetch('http://127.0.0.1:8000/api/renderbooking/',{
             headers:{
                 'Authorization': token,
                 'Content-Type':'application/json',
             }
-        }) //.then(data=>data.json())
+        }) 
+        if (res.status === 403){
+            await AuthApiCall.refreshToken()
+            return this.getAll()
+        }
+        if (res.status === 200){
+            res = await res.json()
+            return res
+        }
     }
-    addBooking(input){
-        return fetch("url", {
+    async addBooking(data){
+        var token = 'Token ' + getCookie('access_token')
+        var res = await fetch("http://127.0.0.1:8000/api/room_rental/", {
               method: "POST",
-              body: JSON.stringify(input),
+              credentials: 'include',
               headers: {
-                "Content-Type": "application/json"
-              }
+                "X-CSRFToken": Cookies.get("csrftoken"),
+                'Authorization': token,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+
             })
-              .then(response => response.json())
-              .catch(error => error);
+        if (res.status === 403){
+            await AuthApiCall.refreshToken()
+            return this.addBooking(data)
+        }
+        else
+            return res 
     }
 }
 export default new BookingApiCall()

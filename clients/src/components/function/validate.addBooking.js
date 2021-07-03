@@ -12,19 +12,20 @@ export function ValidateAddBooking(input){
         return {key : 'identify',value: 'Identify is empty'}
     }
     if (input.identify.length < 9){
-        return {key : 'identify',value: 'Invali identify'}
+        return {key : 'identify',value: 'Invalid identify'}
     }
-    if (!input.phone.match(/\d/g).length===12){
+    if (!input.phone.match(/\d/g).length===10){
         return {key:'phone',value:'Invalid phone number'}
     }
     return true
 }
 
 export function hasError(error){
-    Object.keys(error).map((key)=>{
-        if (error[key] != ''){
+    var keys = Object.keys(error)
+    for (var key of keys){
+        if (error[key] !== ''){
             return true
         }
-    })
+    }
     return false
 }

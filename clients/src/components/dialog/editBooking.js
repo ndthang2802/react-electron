@@ -5,11 +5,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import {TextField,Grid,makeStyles,Box,Typography } from '@material-ui/core';
-import {CloseOutlined,MonetizationOnOutlined} from '@material-ui/icons';
+import {TextField,Grid,makeStyles,Box,Typography,TableHead,TableBody,TableRow,TableCell,Divider } from '@material-ui/core';
+import {CloseOutlined,MonetizationOnOutlined,BackspaceOutlined} from '@material-ui/icons';
 import DatePickers from './DatePickers';
 import { ValidateAddBooking,hasError } from '../function/validate.addBooking';
 import ClientApiCall from '../../apiCall/client.api'
+import BookingApiCall from '../../apiCall/booking.api';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -63,58 +64,60 @@ const useStyles = makeStyles(theme => ({
     gap:'2rem'
   }
 }));
+var initialState = {
+  name: "",
+  email: "",
+  phone:"",
+  identify:"",
+  check_out_at: ""
+}
 export default function EditBookings(props) {
   const {open,handleClose,bookingSelected} = props
   const classes = useStyles()
-  const getDay = () =>{
-    const today = new Date()
-    return today.toISOString().split('T')[0]
-  }
-  const [clientInfo, setclientInfo] = useReducer(
-    (state, newState) => ({ ...state, ...newState }),
-    {
-      name: "",
-      email: "",
-      phone:"",
-      identify:"",
-      StartAt:"",
-      checkOutAt:""
-    }
-  );
-  const fillIn = async () => {
-    if (open) {
-      var info = await ClientApiCall.getClientInfoById(bookingSelected[0].client)
-      setclientInfo({name:info[0].fullname})
-      setclientInfo({email:info[0].emailAddress})
-      setclientInfo({identify:info[0].identityCardNo})
-      setclientInfo({phone:info[0].phoneNo})
-      setclientInfo({StartAt:bookingSelected[0].StartAt})
-      setclientInfo({checkOutAt:bookingSelected[0].checkOutAt})
-      console.log(clientInfo)
-    }
+  const [currentClient,setCurrentClient] = useState()
+  const [currentBooked,setCurrentBooked] = useState()
+
+  const clearAll = () =>{
+    setFormInput({name:''})
+    setFormInput({email:''})
+    setFormInput({phone:''})
+    setFormInput({identify:''})
   }
   useEffect(()=>{
-    fillIn()
-  },[open])
-  const [error,setError] = useState({phone: '',name:'',identify:'',email:'',StartAt:'',checkOutAt:''})
-  const handleSubmit = evt => {
+    clearAll()
+    const getCurrentClient= async (phone)=>{
+      try{
+        var res = await ClientApiCall.getClientInfoByPhone(phone)
+        setCurrentClient(res)
+      } 
+      catch(e){
+        console.log(e)
+      }
+    }
+    if (bookingSelected.length){
+      const fetchData = async()=>{
+        await getCurrentClient(bookingSelected[0].phone)
+      }
+      setCurrentBooked(bookingSelected[0])
+      fetchData()
+    }
+
+  },[open,bookingSelected])
+  const [formInput, setFormInput] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    initialState
+  );
+  const [error,setError] = useState({phone: '',name:'',identify:'',email:'',check_out_at:''})
+  const handleSubmit = async evt => {
     evt.preventDefault();
-    const data = {clientInfo}
+    const data = {formInput}
     let E = ValidateAddBooking(data)
     if (E.length) setError({...error,[E.key]:E.value})
     else{
       if(!hasError(error)){
-        console.log(data)
-        //post here
-        Object.keys(clientInfo).map((key)=>{
-          if (key === 'StartAt' | key === 'checkOutAt'){
-            const newValue = getDay()
-            setclientInfo({[key]:newValue})
-          }
-          else{
-            setclientInfo({[key]:''})
-          }
-        })
+        
+        
+        setFormInput({...initialState})
       }
     }
   };
@@ -122,66 +125,145 @@ export default function EditBookings(props) {
     const name = evt.target.name
     setError({...error,[name]:''})
     let newValue = evt.target.value;
-    setclientInfo({ [name]: newValue });
+    if (name==='phone'){
+      if (newValue.length > 10 | !newValue.match(/\d/g)){
+        setError({...error,[name]:'Invalid phone number.'})
+      } 
+      if(newValue.length === 10){
+        var customer = await ClientApiCall.getClientInfoByPhone(newValue)
+        if (customer.length){
+          setFormInput({name:customer[0].fullname})
+          setFormInput({email:customer[0].email})
+          setFormInput({identify:customer[0].identify})
+        }
+      }
+    }
+    if (name==='identify'){
+      if (newValue.length > 9 | !newValue.match(/\d/g)){
+        setError({...error,[name]:'Invalid identify.'})
+      } 
+    }
+    setFormInput({ [name]: newValue });
   };
   const handleChoose = (e) => {
     const name = e.target.name
     setError({...error,[name]:''})
     const newValue = e.target.value
-    if (name==='StartAt'){
-      if (new Date(newValue) < new Date()){
-        setError({...error,[name]:'Check in must greater than today.'})
-      } 
-    }
-    if (name==='checkOutAt'){
+    if (name==='check_out_at'){
       if (new Date(newValue) < new Date()){
         setError({...error,[name]:'Check in must greater than today.'})
       }
-      else if (new Date(clientInfo.StartAt) > new Date(newValue)){
-        setError({...error,[name]:'Check out must greater or equal today.'})
-      } 
     }
-    setclientInfo({ [name]: newValue })
+    setFormInput({ [name]: newValue })
   }
   
   return (
     <div>
       <Dialog
-        maxWidth='md'
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-slide-title"
-        aria-describedby="alert-dialog-slide-description"
+        maxWidth='md' open={open}
+        TransitionComponent={Transition} keepMounted
+        onClose={handleClose} aria-labelledby="alert-dialog-slide-title" aria-describedby="alert-dialog-slide-description"
       >
-      {
-        bookingSelected.length ?
-        <React.Fragment>
             <DialogTitle id="alert-dialog-slide-title">
               <Box className={classes.dialogTitle}>
-              <b>Edit Bookings</b>
+                <b>Edit Bookings</b>
+                <Button variant="outlined" color="secondary" onClick={clearAll} >Clear&nbsp;&nbsp;<BackspaceOutlined/></Button>
               </Box>
             </DialogTitle>
             <DialogContent dividers={true} className={classes.dialogContent} >
+            <Box>
+              {
+                currentClient ? 
+                <React.Fragment>
+                  <Typography><b>Infomation</b></Typography>
+                  <Grid container spacing={4}>
+                    <Grid container item xs={12} sm= {6}>
+                      <TextField
+                        label="Name"
+                        id="margin-normal"
+                        className={classes.textField}
+                        value={currentClient[0].fullname}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Grid>
+                    <Grid container item xs={12} sm= {6}>
+                      <TextField
+                        label="Phone"
+                        id="margin-normal"
+                        className={classes.textField}
+                        value={currentClient[0].phone}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Grid>
+                    <Grid container item xs={12} sm= {6}>
+                      <TextField
+                        label="Email"
+                        id="margin-normal"
+                        className={classes.textField}
+                        value={currentClient[0].email}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Grid>
+                    <Grid container item xs={12} sm= {6}>
+                      <TextField
+                        label="Identify"
+                        id="margin-normal"
+                        className={classes.textField}
+                        value={currentClient[0].identify}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Grid>
+                    <Grid container item xs={12} sm= {6}>
+                      <TextField
+                        label="Check in "
+                        id="margin-normal"
+                        className={classes.textField}
+                        value={currentBooked.Start_at}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Grid>
+                    <Grid container item xs={12} sm= {6}>
+                      <TextField
+                        label="Identify"
+                        id="margin-normal"
+                        className={classes.textField}
+                        value={currentBooked.Check_out_at}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                </React.Fragment>
+                : null
+              }
+            </Box>
+            <Divider />
             <form onSubmit={handleSubmit} className={classes.form} >
+              <Typography>Edit</Typography>
               <Grid container spacing={5}>
-              <Grid container item xs={12}>
-                <Typography variant='h5' >Client's infomation</Typography>
-              </Grid>
                 <Grid container item xs={12} sm={6}>
                   <TextField
                     error ={error.phone !== '' ? true : false}
                     label="Phone"
                     id="margin-normal"
                     name="phone"
-                    value={clientInfo.phone}
                     className={classes.textField}
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                    onChange={handleInput}
+                    helperText={error.phone}
+                    value={formInput.phone}
+
                   />
-                  
                 </Grid>
                 <Grid container item xs={12} sm={6}>
                   <TextField
@@ -189,11 +271,11 @@ export default function EditBookings(props) {
                     label="Email"
                     id="margin-normal"
                     name="email"
-                    value={clientInfo.email}
                     className={classes.textField}
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                    onChange={handleInput}
+                    helperText={error.email}
+                    value={formInput.email}
+
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
@@ -202,11 +284,11 @@ export default function EditBookings(props) {
                     label="Name"
                     id="margin-normal"
                     name="name"
-                    value={clientInfo.name}
                     className={classes.textField}
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                    onChange={handleInput}
+                    helperText={error.name}
+                    value={formInput.name}
+
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
@@ -215,56 +297,23 @@ export default function EditBookings(props) {
                     label="Identify"
                     id="margin-normal"
                     name="identify"
-                    value={clientInfo.identify}
                     className={classes.textField}
-                    InputProps={{
-                      readOnly: true,
-                    }}
+                    onChange={handleInput}
+                    helperText={error.identify}
+                    value={formInput.identify}
+
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <TextField
-                    error={error.identify !== '' ? true : false}
-                    label="Check in"
-                    id="margin-normal"
-                    name="StartAt"
-                    value={clientInfo.StartAt}
-                    className={classes.textField}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-                <Grid container item xs={12}>
-                  <Typography variant='h5' >Update</Typography>
+                  
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check out'} name='checkOutAt' error={error.checkOutAt} handleChoose={handleChoose} selectedDate={clientInfo.checkOutAt} />
-                </Grid>
-                <Grid container item xs={12} sm={2}>
-                  <TextField
-                    error={error.identify !== '' ? true : false}
-                    label="Room"
-                    id="margin-normal"
-                    name="room"
-                    value='room'
-                    className={classes.textField}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
+                  <DatePickers label={'Check out'} name='check_out_at' error={error.check_out_at} handleChoose={handleChoose} selectedDate={formInput.check_out_at} />
                 </Grid>
               </Grid>
             </form>
             <Box></Box>
             </DialogContent>
-        </React.Fragment>
-        :
-        <React.Fragment>
-          <DialogTitle id="alert-dialog-slide-title"><b>No room selected</b></DialogTitle>
-          <DialogContent>Please choose a room</DialogContent>
-        </React.Fragment>
-      }
         <DialogActions>
         <Grid container item xs={12} >
               <Box display='flex' justifyContent='flex-end' width='100%'>
@@ -284,7 +333,7 @@ export default function EditBookings(props) {
                 className={classes.button}
                 onClick={handleSubmit}
                 >
-                Book <MonetizationOnOutlined className={classes.rightIcon}/>
+                Update <MonetizationOnOutlined className={classes.rightIcon}/>
               </Button>
               </Box>
             </Grid>

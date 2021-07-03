@@ -1,7 +1,6 @@
 import {Box} from '@material-ui/core'
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import EventNoteIcon from '@material-ui/icons/EventNote';
-import TrendingUpOutlinedIcon from '@material-ui/icons/TrendingUpOutlined';
 import WidgetsOutlinedIcon from '@material-ui/icons/WidgetsOutlined';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import LocalAtmOutlinedIcon from '@material-ui/icons/LocalAtmOutlined';

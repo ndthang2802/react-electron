@@ -10,6 +10,7 @@ import {CloseOutlined,MonetizationOnOutlined,BackspaceOutlined} from '@material-
 import DatePickers from './DatePickers';
 import { ValidateAddBooking,hasError } from '../function/validate.addBooking';
 import ClientApiCall from '../../apiCall/client.api'
+import BookingApiCall from '../../apiCall/booking.api';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -63,38 +64,26 @@ const useStyles = makeStyles(theme => ({
     gap:'2rem'
   }
 }));
-function getRoomFloorBook(listBooked){
-    var rooms = []
-    for (var item of listBooked){
-      rooms.push({
-        id : item.id,
-        room: item.room,
-        floor: item.floor,
-        category: item.category
-      })
-    }
-    return rooms
+const getDay = () =>{
+  const today = new Date()
+  return today.toISOString().split('T')[0]
 }
-
 export default function AddBookings(props) {
   const {open,handleClose,roomSelected} = props
   const classes = useStyles()
-  const roomsBooked = getRoomFloorBook(roomSelected)
-  const getDay = () =>{
-    const today = new Date()
-    return today.toISOString().split('T')[0]
+  const room_booked = roomSelected.length ? roomSelected[0].id_room : ''
+  const initialState = {
+    name: "",
+    email: "",
+    phone:"",
+    identify:"",
+    room: room_booked,
+    start_at: getDay(),
+    check_out_at: getDay()
   }
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
-    {
-      name: "",
-      email: "",
-      phone:"",
-      identify:"",
-      rooms:{roomsBooked},
-      StartAt: getDay(),
-      checkOutAt: getDay()
-    }
+    initialState
   );
   const clearAll = () =>{
     setFormInput({name:''})
@@ -104,26 +93,26 @@ export default function AddBookings(props) {
   }
   useEffect(()=>{
     clearAll()
-  },[open])
-  const [error,setError] = useState({phone: '',name:'',identify:'',email:'',StartAt:'',checkOutAt:''})
-  const handleSubmit = evt => {
+  },[open,room_booked])
+  const [error,setError] = useState({phone: '',name:'',identify:'',email:'',start_at:'',check_out_at:''})
+  const handleSubmit = async evt => {
     evt.preventDefault();
     const data = {formInput}
     let E = ValidateAddBooking(data)
     if (E.length) setError({...error,[E.key]:E.value})
     else{
       if(!hasError(error)){
-        console.log(data)
-        //post here
-        Object.keys(formInput).map((key)=>{
-          if (key === 'StartAt' | key === 'checkOutAt'){
-            const newValue = getDay()
-            setFormInput({[key]:newValue})
-          }
-          else{
-            setFormInput({[key]:''})
-          }
-        })
+        var res = await BookingApiCall.addBooking(data.formInput)
+        if (res.status === 400){
+            // Lỗi bad request thông báo lỗi
+            console.log('booked failed')
+        }
+        if (res.status === 201){
+            // Thông báo đặt phòng thành công
+            console.log('booked successfully')
+        }
+        
+        setFormInput({...initialState})
       }
     }
   };
@@ -136,11 +125,11 @@ export default function AddBookings(props) {
         setError({...error,[name]:'Invalid phone number.'})
       } 
       if(newValue.length === 10){
-        var s = await ClientApiCall.getClientInfoByPhone(newValue)
-        if (s.length){
-          setFormInput({name:s[0].fullname})
-          setFormInput({email:s[0].emailAddress})
-          setFormInput({identify:s[0].identityCardNo})
+        var customer = await ClientApiCall.getClientInfoByPhone(newValue)
+        if (customer.length){
+          setFormInput({name:customer[0].fullname})
+          setFormInput({email:customer[0].email})
+          setFormInput({identify:customer[0].identify})
         }
       }
     }
@@ -155,16 +144,16 @@ export default function AddBookings(props) {
     const name = e.target.name
     setError({...error,[name]:''})
     const newValue = e.target.value
-    if (name==='StartAt'){
+    if (name==='start_at'){
       if (new Date(newValue) < new Date()){
         setError({...error,[name]:'Check in must greater than today.'})
       } 
     }
-    if (name==='checkOutAt'){
+    if (name==='check_out_at'){
       if (new Date(newValue) < new Date()){
         setError({...error,[name]:'Check in must greater than today.'})
       }
-      else if (new Date(formInput.StartAt) > new Date(newValue)){
+      else if (new Date(formInput.start_at) > new Date(newValue)){
         setError({...error,[name]:'Check out must greater or equal today.'})
       } 
     }
@@ -182,9 +171,6 @@ export default function AddBookings(props) {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-      {
-        roomSelected.length ?
-        <React.Fragment>
             <DialogTitle id="alert-dialog-slide-title">
               <Box className={classes.dialogTitle}>
               <b>Add Bookings</b>
@@ -243,28 +229,34 @@ export default function AddBookings(props) {
                   />
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check in'} name='StartAt' error={error.StartAt} handleChoose={handleChoose} selectedDate={formInput.StartAt}/>
+                  <DatePickers label={'Check in'} name='start_at' error={error.start_at} handleChoose={handleChoose} selectedDate={formInput.start_at}/>
                 </Grid>
                 <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check out'} name='checkOutAt' error={error.checkOutAt} handleChoose={handleChoose} selectedDate={formInput.checkOutAt} />
+                  <DatePickers label={'Check out'} name='check_out_at' error={error.check_out_at} handleChoose={handleChoose} selectedDate={formInput.check_out_at} />
                 </Grid>
                 <Grid container item xs={12} sm={11}>
                   <Table>
                       <TableHead>
                           <TableRow>
+                          <TableCell><b>Category</b></TableCell>
                             <TableCell><b>Room</b></TableCell>
                             <TableCell><b>Floor</b></TableCell>
-                            <TableCell><b>Category</b></TableCell>
+                            <TableCell><b>Price</b></TableCell>
                           </TableRow>
                       </TableHead>
                       <TableBody>
-                        {roomsBooked.map((row) => (
-                          <TableRow key={row.id}>
-                            <TableCell>{row.room}</TableCell>
-                            <TableCell>{row.floor}</TableCell>
-                            <TableCell>{row.category}</TableCell>
-                          </TableRow>
-                        ))}
+                        {
+                          roomSelected.map((row,index) => {
+                            return (
+                              <TableRow key={index}>
+                                <TableCell>{row.Category}</TableCell>
+                                <TableCell>{row.Number}</TableCell>
+                                <TableCell>{row.Floor}</TableCell>
+                                <TableCell>{row.Price}</TableCell>
+                              </TableRow>
+                            )
+                          })
+                        }
                       </TableBody>
                   </Table>
                 </Grid>
@@ -272,13 +264,6 @@ export default function AddBookings(props) {
             </form>
             <Box></Box>
             </DialogContent>
-        </React.Fragment>
-        :
-        <React.Fragment>
-          <DialogTitle id="alert-dialog-slide-title"><b>No room selected</b></DialogTitle>
-          <DialogContent>Please choose a room</DialogContent>
-        </React.Fragment>
-      }
         <DialogActions>
         <Grid container item xs={12} >
               <Box display='flex' justifyContent='flex-end' width='100%'>

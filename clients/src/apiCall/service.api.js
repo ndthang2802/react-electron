@@ -1,22 +1,26 @@
-const axios = require('axios');
-const Url = `https://fake-api-nnn.herokuapp.com/api/services`
+import {getCookie} from '../components/function/getCookie'
+import AuthApiCall from './auth.api'
+import Cookies from 'js-cookie'
 class ServiceApiCall{
-    getbyId = (id)=>{
-        return axios.get(`${Url}/${id}`).then(res=>res.data)
-    }
-
-    getAll = ()=>{
-        return axios.get(`${Url}`).then(res=>res.data)
+    
+    async getRender(){
+        var token = 'Token ' + getCookie('access_token')
+        var res = await fetch('http://127.0.0.1:8000/api/renderservice/',{
+            headers:{
+                'Authorization': token,
+                'Content-Type':'application/json',
+            }
+        }) 
+        if (res.status === 403){
+            await AuthApiCall.refreshToken()
+            return this.getAll()
+        }
+        if (res.status === 200){
+            res = await res.json()
+            return res
+        }
         
     }
-    getServiceTypeInfo = (id)=>{
-        return axios.get(`${Url}/${id}/servicetypes`).then(res=>res.data)
-    }
-    getRoomInfo = (id)=>{
-        return axios.get(`${Url}/${id}/rooms`).then(res=>res.data)
-    }
-    deleteServie = (id)=>{
-        return axios.delete(`${Url}/${id}`)
-    }
+
 }
 export default new ServiceApiCall()

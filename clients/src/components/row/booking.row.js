@@ -69,23 +69,7 @@ export default function BookingRow(props){
     const [dup,setDup] = useState('')
     //api call for more infomation
     const [infoShow,setInfoShow] = useState()
-    const getMoreInfo = async(info) =>{
-        try {
-            if (info === 'name'){
-                // more client's info
-                var res = await ClientApi.getClientInfoByPhone(row.phone)
-                setInfoShow(res)
-            }
-            else if (info === 'number'){
-                // more room's info
-                var res = await RoomApiCall.getRoomById(row.id_room)
-                setInfoShow(res)
-            }
-        } 
-        catch (e){
-            console.log(e)
-        }
-    }
+
 
     const onClickShow = (e) =>{
         setExpanded(true)
@@ -103,8 +87,25 @@ export default function BookingRow(props){
 
     // reduce duplicate calling
     useEffect(()=>{
+        const getMoreInfo = async(info) =>{
+            try {
+                if (info === 'name'){
+                    // more client's info
+                    var res = await ClientApi.getClientInfoByPhone(row.phone)
+                    setInfoShow(res)
+                }
+                else if (info === 'number'){
+                    // more room's info
+                    res = await RoomApiCall.getRoomById(row.id_room)
+                    setInfoShow(res)
+                }
+            } 
+            catch (e){
+                console.log(e)
+            }
+        }
         getMoreInfo(dup)
-    },[dup])
+    },[dup,row.phone,row.id_room])
     const onClickClose = (e) =>{
         if (e.target.parentNode.id === 'name'){
             setClientExpanded(false)
@@ -137,19 +138,19 @@ export default function BookingRow(props){
                                 !['name','number'].includes(Header)  ? 
                                 <Typography component={'div'} >{row[Header].toString()}</Typography>
                                 :
-                                <Box display='flex' flexWrap='wrap' justifyContent='flex-end' id={Header} >
+                                <Box display='flex' flexWrap='wrap' justifyContent='flex-end' >
                                     <Typography>{row[Header].toString()}</Typography>
                                     {
                                         Header === 'name' ?
                                         clientExpanded ?
-                                            <span id={Header}><ExpandLessOutlined onClick={onClickClose} className={style.hover} className='icon_hover_bottom' /></span>
+                                            <span id={Header} ><ExpandLessOutlined onClick={onClickClose} className='icon_hover_bottom'  /></span>
                                             : 
-                                            <span id={Header}><ExpandMoreOutlined onClick={onClickShow} className={style.hover} className='icon_hover_bottom' /> </span>
+                                            <span id={Header} ><ExpandMoreOutlined onClick={onClickShow} className='icon_hover_bottom'  /> </span>
                                         :
                                         roomExpanded ?
-                                            <span id={Header}><ExpandLessOutlined onClick={onClickClose} className={style.hover} className='icon_hover_bottom' /></span>
+                                            <span id={Header} ><ExpandLessOutlined onClick={onClickClose} className='icon_hover_bottom'  /></span>
                                             : 
-                                            <span id={Header}><ExpandMoreOutlined onClick={onClickShow} className={style.hover} className='icon_hover_bottom' /> </span>
+                                            <span id={Header} ><ExpandMoreOutlined onClick={onClickShow} className='icon_hover_bottom' /> </span>
                                     }
                                 </Box>
                             }

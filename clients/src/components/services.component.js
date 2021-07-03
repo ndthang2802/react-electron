@@ -16,23 +16,22 @@ const useStyles = makeStyles((theme) => ({
 export default function Services(){
     // api call Room Rentals
     const [servicesInfo,setServicesInfo] = useState()
-    const dataCalling = async ()  =>{
+    useEffect(()=>{
+      const dataCalling = async ()  =>{
         try {
-            var res = await ServiceApiCall.getAll()
+            var res = await ServiceApiCall.getRender()
             setServicesInfo(res)
         } 
         catch (e){
             console.log(e)
         }
     }
-    useEffect(()=>{
-      console.log("successfull")
       dataCalling()
     },[])
     //
     const classes = useStyles();
     const [selected, setSelected] = useState([]);
-    const Headers = ['serviceType','rental','createdAt','isCanceled','quantity','sub_total','detail']
+    const Headers = ['Type','Unit_price','Created_at','Quantity','Sub_total','Detail']
     return (
         <React.Fragment>
           <Grid container item xs={4} sm={2}>

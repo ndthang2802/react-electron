@@ -13,7 +13,7 @@ class AuthApiCall{
     }
 
     async refreshToken(){
-        return await fetch('http://127.0.0.1:8000/api/refresh_token/',{   // server
+        const res =  await fetch('http://127.0.0.1:8000/api/refresh_token/',{   // server
         method : 'POST',
         credentials:'include',
         headers : {
@@ -21,6 +21,8 @@ class AuthApiCall{
             'Content-Type' : 'application/json',
         }
         }).then(data=>data.json())
+        document.cookie = `access_token=${res['access_token']};SameSite=None;Secure;`
+
     }
 
 

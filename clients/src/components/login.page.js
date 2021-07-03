@@ -2,7 +2,7 @@ import React, { useState ,useRef } from 'react';
 import {Box,Input,InputLabel,FormControl, Button } from '@material-ui/core'
 import AuthApiCall from '../apiCall/auth.api'
 
-export default function Login_Page(props){
+export default function LoginPage(props){
     const [username,setUsername] = useState('')
     const [password,setPassword] = useState('')
     const [error,setError] = useState('')

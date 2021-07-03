@@ -6,7 +6,8 @@ function createWindown(){
         width:1600,
         height:1400,
         webPreferences:{
-            nodeIntegration:true,
+            nodeIntegration:false,
+            allowEval: false,
         }
     })
 

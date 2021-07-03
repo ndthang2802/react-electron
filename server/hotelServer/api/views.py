@@ -2,6 +2,7 @@ from django.shortcuts import render
 from typing import List
 from django.shortcuts import render
 from django.http import HttpResponse, response
+from jwt.api_jwt import PyJWT
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -68,3 +69,6 @@ def getAvailableRooms(request):
 def getRoomById(request,id):
     info = list(Rooms.objects.select_related().filter(id=id).values(Number=F('number'),Floor=F('floor'),Category=F('category__name'),Price=F('category__price') ))
     return JsonResponse(info,safe=False)
+
+
+

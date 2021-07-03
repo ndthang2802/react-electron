@@ -270,12 +270,16 @@ function prepareRoomRenderData(data){
            }
            else {
              Object.keys(item[key]).map((_)=>{
-               if (_ === 'name' | _ === 'price' || _ === 'notes' & key === 'category' || _ ==='isAvailable' )
-                item_handle[_] = item[key][_]
+               if (_ === 'name' | _ === 'price' || _ === 'notes' & key === 'category' || _ ==='isAvailable' ){
+                 item_handle[_] = item[key][_]
+                }
+                return null
              })
            }
+          return null
         })
         data_handle.push(item_handle)
+        return null
     })
     return data_handle
 }
