@@ -1,16 +1,11 @@
 import React,{ useEffect, useReducer, useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import {TextField,Grid,makeStyles,Box,Typography,TableHead,TableBody,TableRow,TableCell,Divider } from '@material-ui/core';
-import {CloseOutlined,MonetizationOnOutlined,BackspaceOutlined} from '@material-ui/icons';
+import {TextField,Grid,makeStyles,Box,Typography,Button,Dialog,DialogActions,DialogContent,DialogTitle,Slide} from '@material-ui/core';
+import {CloseOutlined,BackspaceOutlined,Update} from '@material-ui/icons';
 import DatePickers from './DatePickers';
-import { ValidateAddBooking,hasError } from '../function/validate.addBooking';
+import { ValidateEditBooking,hasError,completeEditData } from '../function/validate.Booking';
 import ClientApiCall from '../../apiCall/client.api'
-import BookingApiCall from '../../apiCall/booking.api';
+import BookingApiCall from '../../apiCall/booking.api'
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -62,29 +57,60 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     flexWrap :'wrap',
     gap:'2rem'
-  }
+  },
+  center:{
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
 var initialState = {
   name: "",
   email: "",
   phone:"",
   identify:"",
-  check_out_at: ""
+  check_out_at: "",
+  id_rental: ""
 }
 export default function EditBookings(props) {
   const {open,handleClose,bookingSelected} = props
   const classes = useStyles()
   const [currentClient,setCurrentClient] = useState()
   const [currentBooked,setCurrentBooked] = useState()
+  const [error,setError] = useState({phone: '',name:'',identify:'',email:'',check_out_at:'',empty:''})
+
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const OpenConfirmModal = () => {
+    setOpenConfirm(true);
+    var rental = currentBooked.id_rental
+    setFormInput({id_rental:rental})
+  };
+
+  const CloseConfirmModal = () => {
+    setOpenConfirm(false);
+  };
 
   const clearAll = () =>{
     setFormInput({name:''})
     setFormInput({email:''})
     setFormInput({phone:''})
     setFormInput({identify:''})
+    setError({phone: '',name:'',identify:'',email:'',check_out_at:''})
   }
   useEffect(()=>{
     clearAll()
+    setError({phone: '',name:'',identify:'',email:'',check_out_at:'',empty:''})
     const getCurrentClient= async (phone)=>{
       try{
         var res = await ClientApiCall.getClientInfoByPhone(phone)
@@ -102,35 +128,56 @@ export default function EditBookings(props) {
       fetchData()
     }
 
-  },[open,bookingSelected])
+  },[bookingSelected])
+
+  useEffect(()=>{
+    clearAll()
+  },[open])
+
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     initialState
   );
-  const [error,setError] = useState({phone: '',name:'',identify:'',email:'',check_out_at:''})
   const handleSubmit = async evt => {
     evt.preventDefault();
     const data = {formInput}
-    let E = ValidateAddBooking(data)
-    if (E.length) setError({...error,[E.key]:E.value})
+    let E = ValidateEditBooking(data.formInput)
+    if (Object.keys(E).length) {
+      setError({...error,[E.key]:E.value})
+      if(E.key === 'empty'){
+        setTimeout(()=>setError({...error,empty:''}), 5000)
+      }
+    }
+  
     else{
+      var newdata = completeEditData(data.formInput,currentClient[0],currentBooked.Check_out_at)
       if(!hasError(error)){
-        
-        
+        var res = await BookingApiCall.EditBooking(newdata)
+        if (res.status === 204){
+          console.log('Edit success') // thông báo thành công
+        }
+        else if (res.status === 400){
+          console.log('edit failed') // thông báo lỗi
+        }
+
         setFormInput({...initialState})
       }
     }
+    setOpenConfirm(false)
   };
   const handleInput = async evt => {
     const name = evt.target.name
     setError({...error,[name]:''})
     let newValue = evt.target.value;
     if (name==='phone'){
+      // nhập quá 10 số hoặc có kí tự, báo lỗi
       if (newValue.length > 10 | !newValue.match(/\d/g)){
         setError({...error,[name]:'Invalid phone number.'})
       } 
+      // nhập xong số điện thoại (10 số) -> kiểm tra xem khách hàng đã từng đặt chưa
       if(newValue.length === 10){
         var customer = await ClientApiCall.getClientInfoByPhone(newValue)
+        // nếu có thì auto điền những field còn lại
         if (customer.length){
           setFormInput({name:customer[0].fullname})
           setFormInput({email:customer[0].email})
@@ -139,6 +186,7 @@ export default function EditBookings(props) {
       }
     }
     if (name==='identify'){
+      // nhập quá 9 số hoặc có kí tự, báo lỗi
       if (newValue.length > 9 | !newValue.match(/\d/g)){
         setError({...error,[name]:'Invalid identify.'})
       } 
@@ -152,6 +200,9 @@ export default function EditBookings(props) {
     if (name==='check_out_at'){
       if (new Date(newValue) < new Date()){
         setError({...error,[name]:'Check in must greater than today.'})
+      }
+      if (new Date(newValue) < new Date(currentBooked.Start_at)){
+        setError({...error,[name]:'Check in must greater than check out.'})
       }
     }
     setFormInput({ [name]: newValue })
@@ -171,170 +222,108 @@ export default function EditBookings(props) {
               </Box>
             </DialogTitle>
             <DialogContent dividers={true} className={classes.dialogContent} >
-            <Box>
-              {
-                currentClient ? 
-                <React.Fragment>
-                  <Typography><b>Infomation</b></Typography>
-                  <Grid container spacing={4}>
-                    <Grid container item xs={12} sm= {6}>
-                      <TextField
-                        label="Name"
-                        id="margin-normal"
-                        className={classes.textField}
-                        value={currentClient[0].fullname}
-                        InputProps={{
-                          readOnly: true,
-                        }}
+              <Box>
+                {
+                  currentClient ? 
+                  <React.Fragment>
+                    <Grid container spacing={4}>
+                      <Grid container item xs={12} sm={12} className={classes.center}  ><Typography><b>Infomation</b></Typography></Grid>
+                      <Grid container item xs={12} sm= {6} className={classes.center} >
+                        <Grid container item xs={6} sm={3}><Typography><b>Name:</b></Typography></Grid>
+                        <Grid container item xs={6} sm={3}><Typography>{currentClient[0].fullname}</Typography></Grid>
+                      </Grid>
+                      <Grid container item xs={12} sm= {6} className={classes.center} >
+                        <Grid container item xs={6} sm={3}><Typography><b>Phone:</b></Typography></Grid>
+                        <Grid container item xs={6} sm={3}><Typography>{currentClient[0].phone}</Typography></Grid>
+                      </Grid>
+                      <Grid container item xs={12} sm= {6} className={classes.center} >
+                        <Grid container item xs={6} sm={3}><Typography><b>Email:</b></Typography></Grid>
+                        <Grid container item xs={6} sm={3}><Typography>{currentClient[0].email}</Typography></Grid>
+                      </Grid>
+                      <Grid container item xs={12} sm= {6}className={classes.center}  >
+                        <Grid container item xs={6} sm={3}><Typography><b>Identify:</b></Typography></Grid>
+                        <Grid container item xs={6} sm={3}><Typography>{currentClient[0].identify}</Typography></Grid>
+                      </Grid>
+                      <Grid container item xs={12} sm= {6} className={classes.center} >
+                        <Grid container item xs={6} sm={3}><Typography><b>Check in:</b></Typography></Grid>
+                        <Grid container item xs={6} sm={3}><Typography>{currentBooked.Start_at}</Typography></Grid>
+                      </Grid>
+                      <Grid container item xs={12} sm= {6} className={classes.center} >
+                        <Grid container item xs={6} sm={3}><Typography><b>Check out:</b></Typography></Grid>
+                        <Grid container item xs={6} sm={3}><Typography>{currentBooked.Check_out_at}</Typography></Grid>
+                      </Grid>
+                    </Grid>
+                  </React.Fragment>
+                  : null
+                }
+              </Box>
+              <form onSubmit={handleSubmit} className={classes.form} >
+                <Grid container spacing={5}>
+                    <Grid container item xs={12} sm={12} className={classes.center}  ><Typography><b>Edit</b></Typography></Grid>
+                    {/* ------------------------------------------------- */}
+                    <Grid container item xs={12} sm={6}>
+                      <TextField error ={error.phone !== '' ? true : false}
+                        label="Phone"       id="margin-normal-phone"       name="phone"
+                        className={classes.textField}     onChange={handleInput}
+                        helperText={error.phone}      value={formInput.phone}
                       />
                     </Grid>
-                    <Grid container item xs={12} sm= {6}>
-                      <TextField
-                        label="Phone"
-                        id="margin-normal"
-                        className={classes.textField}
-                        value={currentClient[0].phone}
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                    {/* ------------------------------------------------- */}
+                    <Grid container item xs={12} sm={6}>
+                      <TextField error={error.email !== '' ? true : false}
+                        label="Email"   id="margin-normal-email"    name="email"
+                        className={classes.textField}   onChange={handleInput}
+                        helperText={error.email}    value={formInput.email}
                       />
                     </Grid>
-                    <Grid container item xs={12} sm= {6}>
-                      <TextField
-                        label="Email"
-                        id="margin-normal"
-                        className={classes.textField}
-                        value={currentClient[0].email}
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                    {/* ------------------------------------------------- */}
+                    <Grid container item xs={12} sm={6}>
+                      <TextField error={error.name !== '' ? true : false}
+                        label="Name" id="margin-normal-name" name="name"
+                        className={classes.textField} onChange={handleInput}
+                        helperText={error.name}  value={formInput.name}
                       />
                     </Grid>
-                    <Grid container item xs={12} sm= {6}>
-                      <TextField
-                        label="Identify"
-                        id="margin-normal"
-                        className={classes.textField}
-                        value={currentClient[0].identify}
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                    {/* ------------------------------------------------- */}
+                    <Grid container item xs={12} sm={6}>
+                      <TextField  error={error.identify !== '' ? true : false}
+                        label="Identify" id="margin-normal-identify"  name="identify"
+                        className={classes.textField} onChange={handleInput}
+                        helperText={error.identify} value={formInput.identify}
                       />
                     </Grid>
-                    <Grid container item xs={12} sm= {6}>
-                      <TextField
-                        label="Check in "
-                        id="margin-normal"
-                        className={classes.textField}
-                        value={currentBooked.Start_at}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
-                    </Grid>
-                    <Grid container item xs={12} sm= {6}>
-                      <TextField
-                        label="Identify"
-                        id="margin-normal"
-                        className={classes.textField}
-                        value={currentBooked.Check_out_at}
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                      />
+                    {/* ------------------------------------------------- */}
+                    <Grid container item xs={12} sm={6}>
+                      <DatePickers label={'Check out'} name='check_out_at' error={error.check_out_at} handleChoose={handleChoose} selectedDate={formInput.check_out_at} />
                     </Grid>
                   </Grid>
-                </React.Fragment>
-                : null
-              }
-            </Box>
-            <Divider />
-            <form onSubmit={handleSubmit} className={classes.form} >
-              <Typography>Edit</Typography>
-              <Grid container spacing={5}>
-                <Grid container item xs={12} sm={6}>
-                  <TextField
-                    error ={error.phone !== '' ? true : false}
-                    label="Phone"
-                    id="margin-normal"
-                    name="phone"
-                    className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.phone}
-                    value={formInput.phone}
-
-                  />
-                </Grid>
-                <Grid container item xs={12} sm={6}>
-                  <TextField
-                    error={error.email !== '' ? true : false}
-                    label="Email"
-                    id="margin-normal"
-                    name="email"
-                    className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.email}
-                    value={formInput.email}
-
-                  />
-                </Grid>
-                <Grid container item xs={12} sm={6}>
-                  <TextField
-                    error={error.name !== '' ? true : false}
-                    label="Name"
-                    id="margin-normal"
-                    name="name"
-                    className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.name}
-                    value={formInput.name}
-
-                  />
-                </Grid>
-                <Grid container item xs={12} sm={6}>
-                  <TextField
-                    error={error.identify !== '' ? true : false}
-                    label="Identify"
-                    id="margin-normal"
-                    name="identify"
-                    className={classes.textField}
-                    onChange={handleInput}
-                    helperText={error.identify}
-                    value={formInput.identify}
-
-                  />
-                </Grid>
-                <Grid container item xs={12} sm={6}>
-                  
-                </Grid>
-                <Grid container item xs={12} sm={6}>
-                  <DatePickers label={'Check out'} name='check_out_at' error={error.check_out_at} handleChoose={handleChoose} selectedDate={formInput.check_out_at} />
-                </Grid>
-              </Grid>
-            </form>
-            <Box></Box>
+              </form>
             </DialogContent>
         <DialogActions>
-        <Grid container item xs={12} >
+            <Grid container item xs={12} >
+              {
+                  error.empty !== '' ? <Grid container item xs={12} sm={12} className={classes.center}  ><Typography color='error'><b>{error.empty}</b></Typography></Grid> : null
+                }
               <Box display='flex' justifyContent='flex-end' width='100%'>
-                <Button
-                  type="button"
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                onClick={handleClose}
-                >
-                Close <CloseOutlined className={classes.rightIcon} />
+                {/* ----------------------Close Button--------------------------- */}
+                <Button type="button" variant="contained"color="secondary" className={classes.button} onClick={handleClose}> 
+                  Close <CloseOutlined className={classes.rightIcon} /> 
                 </Button>
-                <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={handleSubmit}
-                >
-                Update <MonetizationOnOutlined className={classes.rightIcon}/>
-              </Button>
+                {/* ----------------------Update button--------------------------- */}
+                <Button type="submit" variant="contained" color="primary" className={classes.button} /*onClick={handleSubmit}*/ onClick={OpenConfirmModal}>
+                  Update <Update className={classes.rightIcon}/>
+                </Button>
+                  <Dialog  open={openConfirm} onClose={CloseConfirmModal} aria-labelledby="confim-dialog-title" aria-describedby="alert-dialog-description">
+                    <DialogTitle id="confim-dialog-title">Xác nhận thực hiện những thay đổi</DialogTitle>
+                    <DialogActions>
+                      <Button onClick={CloseConfirmModal} color="primary">
+                        Disagree
+                      </Button>
+                      <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={handleSubmit} >
+                        Agree <Update className={classes.rightIcon}/>
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
               </Box>
             </Grid>
         </DialogActions>
