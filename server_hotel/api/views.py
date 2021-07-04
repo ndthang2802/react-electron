@@ -30,7 +30,7 @@ def BookingRender(request):
                                                                                                     floor=F('room__floor'),
                                                                                                     number=F('room__number'),
                                                                                                     Start_at=F('start_at'),Check_out_at=F('check_out_at'),
-                                                                                                    id_room=F('room__id') ))
+                                                                                                    id_room=F('room__id'),id_rental=F('id')   ))
     return  JsonResponse(info,safe=False)
 # dữ liệu để render trong trang service 
 @api_view(['GET'])
@@ -44,6 +44,24 @@ def ServiceRender(request):
                                                                                     Detail=F('detail'),
                                                                                     Id=F('id') ))
     return  JsonResponse(info,safe=False)
+# dữ liệu render khi thanh toán
+@api_view(['POST'])
+@permission_classes([AllowAny]) # remove this 
+def UnPaidBill(request):
+    client_phone_number = request.data['phone']
+    client_id = Clients.objects.get(phone=client_phone_number)
+
+    client_rental = list(Roomrentals.objects.select_related().filter(client=client_id).values(name=F('client__fullname'),
+                                                                                                    phone=F('client__phone'),
+                                                                                                    floor=F('room__floor'),
+                                                                                                    number=F('room__number'),
+                                                                                                    Start_at=F('start_at'),Check_out_at=F('check_out_at'),
+                                                                                                    id_room=F('room__id'),id_rental=F('id')))
+    client_unpaid_rental = [rental for rental in client_rental if datetime.datetime.strptime(rental['Check_out_at'], '%d/%m/%Y') >= datetime.datetime.now() ]
+    
+    
+    return JsonResponse(client_unpaid_rental,safe=False)
+
 
 #-----------------------API liên quan tới room client -----------------------------#
 
@@ -56,7 +74,8 @@ def getClientByPhone(request,phone):
 #-----------------------API liên quan tới room rentals -----------------------------#
 
 # room rental
-@api_view(['GET','POST'])
+@api_view(['GET','POST','PATCH'])
+#@permission_classes([AllowAny]) # remove this 
 def room_rentals(request):
     if request.method == 'GET':
         rental = list(Roomrentals.objects.values())
@@ -90,8 +109,15 @@ def room_rentals(request):
             room_rental['client'] = str(customer[0]['id'])
         room_rental['staff'] =  request.user.id # id của staff đang đăng nhập để thực hiện booking
         room_rental['created_at'] = str(m) + '/' + str(d) + '/' + str(y)
-        room_rental['start_at'] = request.data['start_at']
-        room_rental['check_out_at'] = request.data['check_out_at']
+        
+        date_rq_ci_str = datetime.datetime.strptime(request.data['start_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
+
+        
+        room_rental['start_at'] = date_rq_ci_str
+        
+        date_rq_co_str = datetime.datetime.strptime(request.data['check_out_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
+        
+        room_rental['check_out_at'] = date_rq_co_str
         room_rental['summary'] = 0  # Chỉnh lại thành số ngày thuê * giá phòng 
 
 
@@ -99,14 +125,40 @@ def room_rentals(request):
         if room_rental_serializer.is_valid():
             # tạo booking mới
             room_rental_serializer.save()
+            # cập nhật lại status phòng vừa được thuê
             this_room = list(Rooms.objects.filter(id=request.data['room']).values())
             room_status = Status.objects.get(id=this_room[0]['status_id'])
             room_status.is_available = 'False'
             room_status.save()
             return Response(room_rental_serializer.data, status=status.HTTP_201_CREATED)
         return Response(room_rental_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # edit booking (cho phép edit thông tin người đặt và ngày check_out)
+    elif request.method == 'PATCH':
+        client = {}
+        
+        rental_update = Roomrentals.objects.get(id = request.data['id_rental'])    
+        
+        date_rq_str = datetime.datetime.strptime(request.data['check_out_at'], "%Y-%m-%d").strftime("%d/%m/%Y") # date dạng string
+        date_rq_dt = datetime.datetime.strptime(date_rq_str, '%d/%m/%Y') # date time
 
+        client['fullname'] = request.data['name']
+        client['phone'] = request.data['phone']
+        client['email'] = request.data['email']
+        client['identify'] = request.data['identify']
 
+        if date_rq_dt > datetime.datetime.now() and serializers.CreateClient(data=client).is_valid(): 
+            rental_update.check_out_at = date_rq_str
+            rental_update.save()
+        
+            client_update = Clients.objects.get(id=rental_update.client.id)
+            client_update.name = request.data['name']
+            client_update.phone = request.data['phone']
+            client_update.email = request.data['email']
+            client_update.identify = request.data['identify']
+            client_update.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+            
 #-----------------------API liên quan tới room -----------------------------#
 
 # lấy tất cả các phòng có thể đặt được (status.is_available = 'true')
