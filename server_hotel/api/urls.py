@@ -38,7 +38,8 @@ urlpatterns = [
     re_path(r'^renderbooking/$', views.BookingRender),
     # 2. Data for render service
     re_path(r'^renderservice/$', views.ServiceRender),
-
+    # 3. Get unpaid bill
+    re_path(r'^unpaidbill/$', views.UnPaidBill),
 
     
 

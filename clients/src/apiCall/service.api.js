@@ -13,7 +13,7 @@ class ServiceApiCall{
         }) 
         if (res.status === 403){
             await AuthApiCall.refreshToken()
-            return this.getAll()
+            return this.getRender()
         }
         if (res.status === 200){
             res = await res.json()
