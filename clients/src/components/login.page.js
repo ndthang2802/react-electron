@@ -20,11 +20,11 @@ export default function LoginPage(props){
         let response = await AuthApiCall.getToken({username,password})
         if (response.status === 200){
             response = await response.json()
+            setToken(response['access_token'])
         }
         else if (response.status === 403){
             setError('Invalid username or password')
         }
-        setToken(response['access_token'])
 
     }
 

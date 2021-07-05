@@ -13,6 +13,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie,csrf_protect,csrf_ex
 from authentication.serializers import UserSerializer
 from authentication.utils import generate_access_token, generate_refresh_token
 import jwt
+from rest_framework import status
 from django.conf import settings
 
 @api_view(['GET'])
@@ -68,10 +69,13 @@ def login_view(request):
         raise exceptions.AuthenticationFailed(
             'username and password required')
 
+
     user = User.objects.filter(username=username).first()
     if(user is None):
+        print('None')
         raise exceptions.AuthenticationFailed('user not found')
     if (not user.check_password(password)):
+        print('checking password')
         raise exceptions.AuthenticationFailed('wrong password')
 
     serialized_user = UserSerializer(user).data
@@ -86,3 +90,13 @@ def login_view(request):
     }
 
     return response
+
+# Log out 
+@api_view(['POST'])
+@ensure_csrf_cookie
+@permission_classes([AllowAny])
+def logout(request):
+        response = Response()
+        response.delete_cookie('refreshtoken')
+        response.delete_cookie('csrftoken')
+        return response

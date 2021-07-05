@@ -46,23 +46,35 @@ def ServiceRender(request):
     return  JsonResponse(info,safe=False)
 # dữ liệu render khi thanh toán
 @api_view(['POST'])
-@permission_classes([AllowAny]) # remove this 
+#@permission_classes([AllowAny]) # remove this 
 def UnPaidBill(request):
     client_phone_number = request.data['phone']
-    client_id = Clients.objects.get(phone=client_phone_number)
-
-    client_rental = list(Roomrentals.objects.select_related().filter(client=client_id).values(name=F('client__fullname'),
-                                                                                                    phone=F('client__phone'),
-                                                                                                    floor=F('room__floor'),
-                                                                                                    number=F('room__number'),
-                                                                                                    Start_at=F('start_at'),Check_out_at=F('check_out_at'),
-                                                                                                    id_room=F('room__id'),id_rental=F('id')))
-    client_unpaid_rental = [rental for rental in client_rental if datetime.datetime.strptime(rental['Check_out_at'], '%d/%m/%Y') >= datetime.datetime.now() ]
+    client_id = Clients.objects.filter(phone=client_phone_number).first()
+    if client_id is not None :
+        client_rental = list(Roomrentals.objects.select_related().filter(client=client_id).values(name=F('client__fullname'),
+                                                                                                        phone=F('client__phone'),
+                                                                                                        floor=F('room__floor'),
+                                                                                                        number=F('room__number'),
+                                                                                                        Start_at=F('start_at'),Check_out_at=F('check_out_at'),
+                                                                                                        id_room=F('room__id'),id_rental=F('id'),
+                                                                                                        Summary=F('summary'),Staff=F('staff__fullname'),Staffphone=F('staff__phone') ))
+        client_unpaid_rental = [rental for rental in client_rental if datetime.datetime.strptime(rental['Check_out_at'], '%d/%m/%Y') >= datetime.datetime.now() ]
+        
+        
+        return JsonResponse(client_unpaid_rental,safe=False)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+# Thanh toán hóa đơn 
+@api_view(['POST'])
+def PayBill(request):
+    id_rental = request.data['id_rental']
     
-    
-    return JsonResponse(client_unpaid_rental,safe=False)
-
-
+# Thông tin nhân viên:
+@api_view(['GET'])
+#@permission_classes([AllowAny]) # remove this 
+def StaffInfo(request):
+    staffs = get_user_model()
+    staff = list(staffs.objects.filter(id=request.user.id).values(Staff=F('fullname')))
+    return JsonResponse(staff,safe=False)
 #-----------------------API liên quan tới room client -----------------------------#
 
 # lấy thông tin client từ số điện thoại

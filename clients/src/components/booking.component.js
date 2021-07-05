@@ -9,7 +9,8 @@ import RoomApiCall from '../apiCall/room.api';
 export default function Bookings(){
     const [rentalInfo,setRentalInfo] = useState()
     const [emptyRoomInfo,setEmptyRoomInfo] = useState()
-    const dataCalling = async ()  =>{
+    useEffect(()=>{
+      const dataCalling = async ()  =>{
         try {
             var res = await BookingApi.getAll()
             setRentalInfo(res)
@@ -27,7 +28,6 @@ export default function Bookings(){
           console.log(e)
       }
     }
-    useEffect(()=>{
       dataCalling()
       emptyRoomCalling()
     },[])

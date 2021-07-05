@@ -1,28 +1,25 @@
+import {getCookie} from '../components/function/getCookie'
+import AuthApiCall from './auth.api'
+import Cookies from 'js-cookie'
+
 class InvoiceApiCall {
-    getById(id){
-        url = 'url'+`?id=${id}`
-        return fetch(url)
-    }
-    get(){
-        return fetch('url')
-    }
-    delete(id){
-        return fetch('url',{
-            method: 'delete',
+    async getUnpaidBill(phone){
+        var token = 'Token ' + getCookie('access_token')
+        var res = await fetch('http://127.0.0.1:8000/api/unpaidbill/',{
+            method:'POST',
+            credentials: 'include',
             headers:{
-                'Content-Type':'application/json'
+                'Authorization': token,
+                'Content-Type':'application/json',
+                "X-CSRFToken": Cookies.get("csrftoken"),
             },
-            body: JSON.stringify({'id':id})
-        })
-    }
-    create(data){
-        return fetch('url',{
-            method: 'post',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify(data)
-        })
+            body: JSON.stringify(phone)
+        }) 
+        if (res.status === 403){
+            await AuthApiCall.refreshToken()
+            return this.getUnpaidBill()
+        }
+        else return res
     }
 }
 

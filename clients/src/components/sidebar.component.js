@@ -105,7 +105,7 @@ export function InvoiceSideBar(props){
                     aria-labelledby="nested-list-subheader"
                     subheader={
                         <ListSubheader component="div" id="nested-list-subheader" style={{'fontSize':'1.2rem'}}>
-                        <b>Filter</b>
+                        <b>Chức năng khác</b>
                         </ListSubheader>
                     }
                     className={classes.root}
@@ -114,13 +114,13 @@ export function InvoiceSideBar(props){
                         <ListItemIcon>
                         <AttachMoney />
                         </ListItemIcon>
-                        <ListItemText primary="Staff name" />
+                        <ListItemText primary="Option 1" />
                     </ListItem>
                     <ListItem button className='hover_left'>
                         <ListItemIcon>
                         <MoneyOff />
                         </ListItemIcon>
-                        <ListItemText primary="Date" />
+                        <ListItemText primary="Option 2" />
                     </ListItem>
                 </List>
             </Box>
