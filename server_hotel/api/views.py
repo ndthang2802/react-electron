@@ -120,16 +120,16 @@ def room_rentals(request):
         else:
             room_rental['client'] = str(customer[0]['id'])
         room_rental['staff'] =  request.user.id # id của staff đang đăng nhập để thực hiện booking
-        room_rental['created_at'] = str(m) + '/' + str(d) + '/' + str(y)
+        room_rental['created_at'] = datetime.datetime.now()
         
-        date_rq_ci_str = datetime.datetime.strptime(request.data['start_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
-
+        #date_rq_ci_str = datetime.datetime.strptime(request.data['start_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
+    
+        room_rental['start_at'] = datetime.datetime.strptime(request.data['start_at'], '%Y-%m-%d')
         
-        room_rental['start_at'] = date_rq_ci_str
+        #date_rq_co_str = datetime.datetime.strptime(request.data['check_out_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
         
-        date_rq_co_str = datetime.datetime.strptime(request.data['check_out_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
-        
-        room_rental['check_out_at'] = date_rq_co_str
+        room_rental['check_out_at'] = datetime.datetime.strptime(request.data['check_out_at'], '%Y-%m-%d')
+        room_rental['paid_at'] = None
         room_rental['summary'] = 0  # Chỉnh lại thành số ngày thuê * giá phòng 
 
 

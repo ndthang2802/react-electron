@@ -44,9 +44,18 @@ class Roomrentals(models.Model):
     
     staff = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, db_column='staff')
 
-    created_at = models.CharField(max_length=20, blank=True, null=True)
-    start_at = models.CharField(max_length=20, blank=True, null=True)
-    check_out_at = models.CharField(max_length=20, blank=True, null=True)
+    #created_at = models.CharField(max_length=20, blank=True, null=True)  
+    created_at = models.DateTimeField()
+
+    #start_at = models.CharField(max_length=20, blank=True, null=True)
+    start_at = models.DateTimeField()
+    
+    #check_out_at = models.CharField(max_length=20, blank=True, null=True)
+    check_out_at = models.DateTimeField()
+    
+    ###
+    paid_at = models.DateTimeField(null=True)
+    
     summary = models.IntegerField()
 
     class Meta:
@@ -76,7 +85,7 @@ class Service(models.Model):
 
     type = models.ForeignKey('Servicetypes', models.DO_NOTHING, db_column='type')
     rental = models.ForeignKey(Roomrentals, models.DO_NOTHING, db_column='rental')
-    created_at = models.CharField(max_length=20, blank=True, null=True)
+    created_at = models.DateTimeField()
     is_canceled = models.CharField(max_length=5)
     quantity = models.IntegerField()
     sub_total = models.IntegerField()
