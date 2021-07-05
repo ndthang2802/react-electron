@@ -50,7 +50,11 @@ export function completeEditData(newinput,oldClient,OldCheckout){
     return newinput
 
 }
+export function completeBookData(newinput,id_room){
+    newinput['room'] = id_room
+    return newinput
 
+}
 export function hasError(error){
     var keys = Object.keys(error)
     for (var key of keys){

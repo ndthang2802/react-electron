@@ -2,7 +2,7 @@ import React,{ useEffect, useReducer, useState } from 'react';
 import {TextField,Grid,makeStyles,Box,Table,TableHead,TableBody,TableRow,TableCell,Button,Dialog,DialogActions,DialogTitle,DialogContent,Slide } from '@material-ui/core';
 import {CloseOutlined,MonetizationOnOutlined,BackspaceOutlined} from '@material-ui/icons';
 import DatePickers from './DatePickers';
-import { ValidateAddBooking,hasError } from '../function/validate.Booking';
+import { ValidateAddBooking,hasError,completeBookData } from '../function/validate.Booking';
 import ClientApiCall from '../../apiCall/client.api'
 import BookingApiCall from '../../apiCall/booking.api';
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -65,13 +65,13 @@ const getDay = () =>{
 export default function AddBookings(props) {
   const {open,handleClose,roomSelected} = props
   const classes = useStyles()
-  const room_booked = roomSelected.length ? roomSelected[0].id_room : ''
+  //const room_booked = roomSelected.length ? roomSelected[0].id_room : ''
   const initialState = {
     name: "",
     email: "",
     phone:"",
     identify:"",
-    room: room_booked,
+    room: "",
     start_at: getDay(),
     check_out_at: getDay()
   }
@@ -90,7 +90,7 @@ export default function AddBookings(props) {
   }
   useEffect(()=>{
     clearAll()
-  },[open,room_booked])
+  },[open])
   const handleSubmit = async evt => {
     evt.preventDefault();
     const data = {formInput}
@@ -98,7 +98,8 @@ export default function AddBookings(props) {
     if (Object.keys(E).length) setError({...error,[E.key]:E.value})
     else{
       if(!hasError(error)){
-        var res = await BookingApiCall.addBooking(data.formInput)
+        var newdata = completeBookData(data.formInput,roomSelected[0].id_room)
+        var res = await BookingApiCall.addBooking(newdata)
         if (res.status === 400){
             // Lỗi bad request thông báo lỗi
             console.log('booked failed')

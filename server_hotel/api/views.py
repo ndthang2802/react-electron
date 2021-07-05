@@ -129,7 +129,7 @@ def room_rentals(request):
         #date_rq_co_str = datetime.datetime.strptime(request.data['check_out_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
         
         room_rental['check_out_at'] = datetime.datetime.strptime(request.data['check_out_at'], '%Y-%m-%d')
-        room_rental['paid_at'] = None
+        
         room_rental['summary'] = 0  # Chỉnh lại thành số ngày thuê * giá phòng 
 
 
