@@ -1,11 +1,101 @@
 id,title,description,is_available
-0d52295dddaa11eb829b9828a6410061,Cadillac,"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",true
-0d535ab8ddaa11eb829b9828a6410061,Mazda,"Vivamus vestibulum sagittis sapien.",false
-0d5444a7ddaa11eb829b9828a6410061,Toyota,"Morbi non lectus.",false
-0d54f189ddaa11eb829b9828a6410061,Toyota,"Sed sagittis.",true
-0d55d902ddaa11eb829b9828a6410061,GMC,"Integer ac neque.",true
-0d5673dcddaa11eb829b9828a6410061,Subaru,"Donec ut mauris eget massa tempor convallis.",true
-0d572612ddaa11eb829b9828a6410061,GMC,"Nullam porttitor lacus at turpis.",true
-0d57d703ddaa11eb829b9828a6410061,Mazda,"Etiam faucibus cursus urna.",false
-0d588eabddaa11eb829b9828a6410061,Toyota,"Proin leo odio, porttitor id, consequat in, consequat ut, nulla.",false
-0d59499cddaa11eb829b9828a6410061,Mazda,"Etiam faucibus cursus urna.",false
+50991e7bde4a11eb829b9828a6410061,Eagle,"Proin leo odio, porttitor id, consequat in, consequat ut, nulla.",true
+509b7d66de4a11eb829b9828a6410061,Mercury,"Integer a nibh.",false
+509fa832de4a11eb829b9828a6410061,BMW,"Nunc rhoncus dui vel sem.",true
+50a0bdc0de4a11eb829b9828a6410061,Chrysler,"Proin eu mi.",true
+50a18797de4a11eb829b9828a6410061,Volvo,"Nulla justo.",false
+50a2229cde4a11eb829b9828a6410061,Toyota,"Nulla tellus.",false
+50a2d8efde4a11eb829b9828a6410061,Ford,"In hac habitasse platea dictumst.",false
+50a3770ede4a11eb829b9828a6410061,Porsche,"Duis ac nibh.",true
+50a4195ade4a11eb829b9828a6410061,Mercedes-Benz,"Donec dapibus.",true
+50a4e7ccde4a11eb829b9828a6410061,Buick,"Nulla tellus.",true
+50a56d6ede4a11eb829b9828a6410061,Chrysler,"Ut at dolor quis odio consequat varius.",false
+50a64050de4a11eb829b9828a6410061,Citroën,"Morbi quis tortor id nulla ultrices aliquet.",true
+50a6da5dde4a11eb829b9828a6410061,Pontiac,"Morbi porttitor lorem id ligula.",false
+50a77240de4a11eb829b9828a6410061,BMW,"Nunc rhoncus dui vel sem.",false
+50a83a9ede4a11eb829b9828a6410061,Honda,"In hac habitasse platea dictumst.",true
+50a8f719de4a11eb829b9828a6410061,GMC,"Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.",true
+50a9b0d7de4a11eb829b9828a6410061,Buick,"Praesent id massa id nisl venenatis lacinia.",false
+50aaaf5bde4a11eb829b9828a6410061,Ford,"Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",true
+50ab649fde4a11eb829b9828a6410061,Pontiac,"Proin leo odio, porttitor id, consequat in, consequat ut, nulla.",false
+50abf543de4a11eb829b9828a6410061,Infiniti,"Suspendisse potenti.",true
+50ac9488de4a11eb829b9828a6410061,Lexus,"Duis at velit eu est congue elementum.",true
+50ad3182de4a11eb829b9828a6410061,Buick,"Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla.",false
+50adec57de4a11eb829b9828a6410061,Buick,"Cras pellentesque volutpat dui.",false
+50ae79aede4a11eb829b9828a6410061,Chevrolet,"Nam dui.",false
+50af5bafde4a11eb829b9828a6410061,Honda,"In hac habitasse platea dictumst.",false
+50afd86dde4a11eb829b9828a6410061,Ford,"Vestibulum ac est lacinia nisi venenatis tristique.",false
+50b052b8de4a11eb829b9828a6410061,Lincoln,"Nulla mollis molestie lorem.",false
+50b0d71fde4a11eb829b9828a6410061,Cadillac,"Vivamus tortor.",true
+50b16f74de4a11eb829b9828a6410061,Mercedes-Benz,"Aenean fermentum.",true
+50b20bf3de4a11eb829b9828a6410061,Toyota,"Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio.",false
+50b28d92de4a11eb829b9828a6410061,Volkswagen,"Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",false
+50b314eade4a11eb829b9828a6410061,Infiniti,"Sed accumsan felis.",true
+50b3cc2ade4a11eb829b9828a6410061,Maybach,"Vestibulum quam sapien, varius ut, blandit non, interdum in, ante.",false
+50b45dfade4a11eb829b9828a6410061,Ford,"Nulla justo.",true
+50b4e1eade4a11eb829b9828a6410061,Mitsubishi,"Donec dapibus.",false
+50b56a78de4a11eb829b9828a6410061,Lexus,"Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.",false
+50b5eed5de4a11eb829b9828a6410061,BMW,"Cras pellentesque volutpat dui.",false
+50b68b83de4a11eb829b9828a6410061,Mitsubishi,"Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa.",false
+50b71f97de4a11eb829b9828a6410061,Dodge,"Aenean lectus.",true
+50b7c0cfde4a11eb829b9828a6410061,Kia,"Nulla suscipit ligula in lacus.",false
+50b86695de4a11eb829b9828a6410061,"Land Rover","Donec posuere metus vitae ipsum.",true
+50b8eea8de4a11eb829b9828a6410061,Ford,"Morbi non quam nec dui luctus rutrum.",false
+50b98a2dde4a11eb829b9828a6410061,Volkswagen,"Integer a nibh.",true
+50ba1f6fde4a11eb829b9828a6410061,Dodge,"Fusce posuere felis sed lacus.",true
+50baaa18de4a11eb829b9828a6410061,MINI,"Vivamus vel nulla eget eros elementum pellentesque.",false
+50bb4de0de4a11eb829b9828a6410061,Mercedes-Benz,"Morbi ut odio.",true
+50bbd7e5de4a11eb829b9828a6410061,Chevrolet,"Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci.",true
+50bc6d49de4a11eb829b9828a6410061,Jaguar,"Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci.",true
+50bef808de4a11eb829b9828a6410061,Toyota,"Ut at dolor quis odio consequat varius.",true
+50bf9229de4a11eb829b9828a6410061,Suzuki,"Suspendisse ornare consequat lectus.",false
+50c010f7de4a11eb829b9828a6410061,Oldsmobile,"Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",true
+50c0b554de4a11eb829b9828a6410061,Bentley,"Vivamus vel nulla eget eros elementum pellentesque.",false
+50c16af4de4a11eb829b9828a6410061,Mercury,"Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci.",false
+50c21026de4a11eb829b9828a6410061,Hyundai,"Donec ut dolor.",false
+50c2ac0dde4a11eb829b9828a6410061,Saturn,"Donec posuere metus vitae ipsum.",false
+50c363a5de4a11eb829b9828a6410061,GMC,"Curabitur in libero ut massa volutpat convallis.",true
+50c480acde4a11eb829b9828a6410061,Porsche,"Mauris sit amet eros.",false
+50c512e5de4a11eb829b9828a6410061,Chrysler,"Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa.",false
+50c5aa12de4a11eb829b9828a6410061,Audi,"Vivamus vel nulla eget eros elementum pellentesque.",true
+50c65eb0de4a11eb829b9828a6410061,Hummer,"Curabitur in libero ut massa volutpat convallis.",true
+50c71b1ade4a11eb829b9828a6410061,Mercedes-Benz,"Duis aliquam convallis nunc.",false
+50c7bac0de4a11eb829b9828a6410061,Infiniti,"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",true
+50c8498dde4a11eb829b9828a6410061,Honda,"Nulla nisl.",false
+50c8ec5bde4a11eb829b9828a6410061,Ford,"Etiam vel augue.",true
+50c97eb5de4a11eb829b9828a6410061,Peugeot,"Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.",true
+50cab245de4a11eb829b9828a6410061,Audi,"Morbi non quam nec dui luctus rutrum.",false
+50cb53b2de4a11eb829b9828a6410061,Ford,"Curabitur convallis.",false
+50cbf121de4a11eb829b9828a6410061,Chevrolet,"Praesent blandit.",false
+50cc9279de4a11eb829b9828a6410061,Isuzu,"Duis ac nibh.",true
+50cd6f15de4a11eb829b9828a6410061,Mazda,"Aliquam quis turpis eget elit sodales scelerisque.",true
+50ce0cd8de4a11eb829b9828a6410061,Dodge,"Phasellus in felis.",false
+50ce8f74de4a11eb829b9828a6410061,Mitsubishi,"Aliquam quis turpis eget elit sodales scelerisque.",true
+50cf16d2de4a11eb829b9828a6410061,Toyota,"Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.",false
+50cfcf2bde4a11eb829b9828a6410061,Dodge,"Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl.",false
+50d07711de4a11eb829b9828a6410061,"Land Rover","Etiam faucibus cursus urna.",true
+50d11015de4a11eb829b9828a6410061,MINI,"Suspendisse potenti.",true
+50d19dc5de4a11eb829b9828a6410061,Chevrolet,"Sed sagittis.",false
+50d2404cde4a11eb829b9828a6410061,Pontiac,"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",true
+50d2e030de4a11eb829b9828a6410061,Chevrolet,"Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo.",false
+50d3656ade4a11eb829b9828a6410061,Nissan,"Quisque porta volutpat erat.",true
+50d3e116de4a11eb829b9828a6410061,Ford,"Fusce consequat.",false
+50d4a614de4a11eb829b9828a6410061,Nissan,"Donec dapibus.",true
+50d55095de4a11eb829b9828a6410061,BMW,"Proin leo odio, porttitor id, consequat in, consequat ut, nulla.",true
+50d5e1cfde4a11eb829b9828a6410061,Acura,"Nulla justo.",true
+50d66512de4a11eb829b9828a6410061,Mercury,"Proin risus.",true
+50d6ed69de4a11eb829b9828a6410061,Infiniti,"Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",true
+50d774cede4a11eb829b9828a6410061,Buick,"Nam nulla.",false
+50d81f83de4a11eb829b9828a6410061,Chrysler,"Sed accumsan felis.",false
+50d8bd01de4a11eb829b9828a6410061,Mitsubishi,"Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla.",false
+50d98ca7de4a11eb829b9828a6410061,GMC,"Aliquam erat volutpat.",false
+50da51c0de4a11eb829b9828a6410061,Ford,"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",true
+50dae34dde4a11eb829b9828a6410061,Kia,"Etiam faucibus cursus urna.",true
+50db7647de4a11eb829b9828a6410061,Pontiac,"Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc.",false
+50dd994dde4a11eb829b9828a6410061,Mitsubishi,"Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",false
+50dfc7c7de4a11eb829b9828a6410061,Volkswagen,"Nunc nisl.",false
+50e0875bde4a11eb829b9828a6410061,Mitsubishi,"Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue.",false
+50e12408de4a11eb829b9828a6410061,Chevrolet,"Nam dui.",true
+50e1e38ade4a11eb829b9828a6410061,Audi,"Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis.",false
+50e28278de4a11eb829b9828a6410061,Chevrolet,"Nullam porttitor lacus at turpis.",false
+50e2fffbde4a11eb829b9828a6410061,Mitsubishi,"Quisque ut erat.",false
