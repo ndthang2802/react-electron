@@ -59,8 +59,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 const getDay = () =>{
-  const today = new Date()
-  return today.toISOString().split('T')[0]
+  var today = new Date()
+  today = today.toISOString().split('.')[0]
+  return today.slice(0, today.lastIndexOf(':'))
 }
 export default function AddBookings(props) {
   const {open,handleClose,roomSelected} = props

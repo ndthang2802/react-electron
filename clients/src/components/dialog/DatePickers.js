@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
+    width: 250,
   },
 }));
 
@@ -23,7 +23,7 @@ export default function DatePickers(props) {
         error ={error !== '' ? true : false}
         id="date"
         label={label}
-        type="date"
+        type="datetime-local"
         name={name}
         value= {selectedDate}
         className={classes.textField}

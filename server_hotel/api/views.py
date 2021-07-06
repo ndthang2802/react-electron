@@ -14,7 +14,9 @@ from django.db.models import F
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import get_user_model
 from . import serializers
-import datetime
+import datetime 
+from django.db.models import  DateTimeField
+from django.db.models.functions import Trunc
 # Create your views here.
 
 
@@ -29,8 +31,9 @@ def BookingRender(request):
                                                                                                     phone=F('client__phone'),
                                                                                                     floor=F('room__floor'),
                                                                                                     number=F('room__number'),
-                                                                                                    Start_at=F('start_at'),Check_out_at=F('check_out_at'),
-                                                                                                    id_room=F('room__id'),id_rental=F('id')   ))
+                                                                                                    Start_at=F('start_at'),
+                                                                                                    Check_out_at= F('check_out_at'),
+                                                                                                    id_room=F('room__id'),id_rental=F('id')   ))                                                                                            
     return  JsonResponse(info,safe=False)
 # dữ liệu để render trong trang service 
 @api_view(['GET'])
@@ -51,17 +54,17 @@ def UnPaidBill(request):
     client_phone_number = request.data['phone']
     client_id = Clients.objects.filter(phone=client_phone_number).first()
     if client_id is not None :
-        client_rental = list(Roomrentals.objects.select_related().filter(client=client_id).values(name=F('client__fullname'),
+        client_rental = list(Roomrentals.objects.select_related().filter(client=client_id,paid_at=None).values(name=F('client__fullname'),
                                                                                                         phone=F('client__phone'),
                                                                                                         floor=F('room__floor'),
                                                                                                         number=F('room__number'),
                                                                                                         Start_at=F('start_at'),Check_out_at=F('check_out_at'),
                                                                                                         id_room=F('room__id'),id_rental=F('id'),
                                                                                                         Summary=F('summary'),Staff=F('staff__fullname'),Staffphone=F('staff__phone') ))
-        client_unpaid_rental = [rental for rental in client_rental if datetime.datetime.strptime(rental['Check_out_at'], '%d/%m/%Y') >= datetime.datetime.now() ]
+        #client_unpaid_rental = [rental for rental in client_rental if rental['paid_at'] is None ]
         
         
-        return JsonResponse(client_unpaid_rental,safe=False)
+        return JsonResponse(client_rental,safe=False)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 # Thanh toán hóa đơn 
 @api_view(['POST'])
@@ -103,6 +106,7 @@ def room_rentals(request):
         room_rental = {}
         room_rental['room'] = request.data['room']
         customer = list(Clients.objects.filter(phone=request.data['phone']).values()) # kiểm tra xem khách hàng tồn tại ko
+        room_rented = list(Rooms.objects.filter(id=request.data['room']).values())
         if not len(customer):
             # nếu không tồn tại thì tạo client mới
             client = {}
@@ -122,15 +126,17 @@ def room_rentals(request):
         room_rental['staff'] =  request.user.id # id của staff đang đăng nhập để thực hiện booking
         room_rental['created_at'] = datetime.datetime.now()
         
-        #date_rq_ci_str = datetime.datetime.strptime(request.data['start_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
     
-        room_rental['start_at'] = datetime.datetime.strptime(request.data['start_at'], '%Y-%m-%d')
+        room_rental['start_at'] = datetime.datetime.strptime(request.data['start_at'], '%Y-%m-%dT%H:%M')
         
-        #date_rq_co_str = datetime.datetime.strptime(request.data['check_out_at'], "%Y-%m-%d").strftime("%d/%m/%Y")
         
-        room_rental['check_out_at'] = datetime.datetime.strptime(request.data['check_out_at'], '%Y-%m-%d')
+        room_rental['check_out_at'] = datetime.datetime.strptime(request.data['check_out_at'], '%Y-%m-%dT%H:%M')
+
+        delta = room_rental['check_out_at'] - room_rental['start_at']
         
-        room_rental['summary'] = 0  # Chỉnh lại thành số ngày thuê * giá phòng 
+        # Lấy giá của phòng:
+        room_price = list(Categories.objects.filter(id =room_rented[0]['category_id']).values())[0]
+        room_rental['summary'] = int ( round( ( (delta.days*24 + delta.seconds / 3600)/24  ) *   room_price['price'] ))  # thời gian thuê * giá phòng 
 
 
         room_rental_serializer = serializers.CreateRoomRental(data=room_rental)
@@ -150,16 +156,24 @@ def room_rentals(request):
         
         rental_update = Roomrentals.objects.get(id = request.data['id_rental'])    
         
-        date_rq_str = datetime.datetime.strptime(request.data['check_out_at'], "%Y-%m-%d").strftime("%d/%m/%Y") # date dạng string
-        date_rq_dt = datetime.datetime.strptime(date_rq_str, '%d/%m/%Y') # date time
+        check_out = datetime.datetime.strptime(request.data['check_out_at'], '%Y-%m-%dT%H:%M') 
 
         client['fullname'] = request.data['name']
         client['phone'] = request.data['phone']
         client['email'] = request.data['email']
         client['identify'] = request.data['identify']
 
-        if date_rq_dt > datetime.datetime.now() and serializers.CreateClient(data=client).is_valid(): 
-            rental_update.check_out_at = date_rq_str
+        if check_out > datetime.datetime.now() and serializers.CreateClient(data=client).is_valid(): 
+            rental_update.check_out_at = check_out
+                # update lại giá
+            this_rental = list(Roomrentals.objects.filter(id=request.data['id_rental']).values())[0] # hóa đơn
+            this_room = list(Rooms.objects.filter(id=this_rental['room_id']).values()) # phòng tương ứng
+            room_price = list(Categories.objects.filter(id =this_room[0]['category_id']).values())[0] # giá
+            start_day = this_rental['start_at'].isoformat() # ngày bắt đầu
+            start_day = start_day[0:16]
+            start_day =  datetime.datetime.strptime(start_day, '%Y-%m-%dT%H:%M') # convert
+            delta = check_out - start_day
+            rental_update.summary = int ( round( ( (delta.days*24 + delta.seconds / 3600)/24  ) *   room_price['price'] ))
             rental_update.save()
         
             client_update = Clients.objects.get(id=rental_update.client.id)

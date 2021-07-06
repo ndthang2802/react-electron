@@ -41,8 +41,8 @@ export default function Dashboard(props){
         props.setRender(e.target.id);
         document.getElementById(e.target.id).classList.add('dashboard_focus')
     }
-    const logout = ()=>{
-        var res = AuthApiCall.logOut()
+    const logout = async ()=>{
+        var res = await AuthApiCall.logOut()
     }
     return (
         <Box display='flex' flexDirection='row' flexWrap='wrap' width='100%' boxShadow={2}>

@@ -97,9 +97,9 @@ export default function Invoice(){
           break
         }
       }
-      if (billSelected){
-        setOpenBill(true)
-      }
+      
+      setOpenBill(true)
+    
     }
     const closeError = ()=>{
       setError('')
