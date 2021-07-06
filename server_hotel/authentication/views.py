@@ -10,8 +10,8 @@ from rest_framework import exceptions
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import ensure_csrf_cookie,csrf_protect,csrf_exempt
-from authentication.serializers import UserSerializer
-from authentication.utils import generate_access_token, generate_refresh_token
+from .serializers import UserSerializer
+from .utils import generate_access_token, generate_refresh_token
 import jwt
 from rest_framework import status
 from django.conf import settings
