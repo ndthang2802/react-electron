@@ -5,7 +5,7 @@ import DatePickers from './DatePickers';
 import { ValidateAddBooking,hasError,completeBookData } from '../function/validate.Booking';
 import ClientApiCall from '../../apiCall/client.api'
 import BookingApiCall from '../../apiCall/booking.api';
-//import {SuccessSnackbars,FailSnackbars } from "./addBookSuccessAndFail"
+import {SuccessSnackbars,FailSnackbars } from "./addBookSuccessAndFail"
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -163,8 +163,8 @@ export default function AddBookings(props) {
   return (
     <div>
       <Dialog maxWidth='md' open={open} TransitionComponent={Transition} keepMounted onClose={handleClose} aria-labelledby="alert-dialog-slide-title" aria-describedby="alert-dialog-slide-description">
-            {/* <SuccessSnackbars open={openDialogSuccess} setOpen={setOpenDialogSuccess}></SuccessSnackbars>
-            <FailSnackbars open={openDialogFail} setOpen={setOpenDialogFail}></FailSnackbars> */}
+            <SuccessSnackbars open={openDialogSuccess} setOpen={setOpenDialogSuccess}></SuccessSnackbars>
+            <FailSnackbars open={openDialogFail} setOpen={setOpenDialogFail}></FailSnackbars>
             <DialogTitle id="alert-dialog-slide-title">
               <Box className={classes.dialogTitle}>
                 <b>Add Bookings</b>
