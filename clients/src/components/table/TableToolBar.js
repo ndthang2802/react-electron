@@ -12,7 +12,7 @@ export default function TableToolBar(props){
         <Toolbar className={clsx(header_styles.root,{[header_styles.highlight]: numberSelected > 0})}>
             {
                 numberSelected > 0 ?
-                (<Typography  className={header_styles.title} color="inherit" variant='h5' component='div' >{numberSelected} selected</Typography>) 
+                (<Typography  className={header_styles.title} color="inherit" variant='h5' component='div' > Selected</Typography>) 
                 :
                 (<Typography  className={header_styles.title} variant='h5' component='div' >{tableName}</Typography>)
             }

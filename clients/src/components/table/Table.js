@@ -29,10 +29,9 @@ export default function EnhancedTable(props) {
       }
       setSelected([]);
     };
-    const handleClick = (event, name) => {
+/*     const handleClick = (event, name) => {
       const selectedIndex = selected.indexOf(name);
       let newSelected = [];
-    
       if (selectedIndex === -1) {
         newSelected = newSelected.concat(selected, name);
       } else if (selectedIndex === 0) {
@@ -47,7 +46,17 @@ export default function EnhancedTable(props) {
       }
     
       setSelected(newSelected);
-    };
+    }; */
+    const handleClick = (event, name) => {
+      if (selected[0] === name)
+      {
+        setSelected([]);
+      }
+      else{
+        setSelected([name]);
+      }
+      
+    }
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === "asc";
       setOrder(isAsc ? "desc" : "asc");

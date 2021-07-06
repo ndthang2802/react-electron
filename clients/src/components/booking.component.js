@@ -32,12 +32,14 @@ export default function Bookings(){
       emptyRoomCalling()
     },[])
 
+
     const [selected, setSelected] = useState([]);
     const [emptySelected, setEmptySelected] = useState([]);
     const Headers = ['name','phone','Start_at','Check_out_at','floor','number']
     const RoomHeaders = ['Category','Price','Floor','Number']
     return (
         <React.Fragment>
+      
           <Grid container item xs={4} sm={2}>
             <BookingSideBar roomSelected = {emptySelected} bookingSelected = {selected} />
           </Grid>

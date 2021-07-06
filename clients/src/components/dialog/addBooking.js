@@ -5,6 +5,7 @@ import DatePickers from './DatePickers';
 import { ValidateAddBooking,hasError,completeBookData } from '../function/validate.Booking';
 import ClientApiCall from '../../apiCall/client.api'
 import BookingApiCall from '../../apiCall/booking.api';
+import {SuccessSnackbars,FailSnackbars } from "./addBookSuccessAndFail"
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -64,6 +65,8 @@ const getDay = () =>{
 }
 export default function AddBookings(props) {
   const {open,handleClose,roomSelected} = props
+  const [openDialogSuccess,setOpenDialogSuccess] =useState(false) 
+  const [openDialogFail,setOpenDialogFail] =useState(false) 
   const classes = useStyles()
   const initialState = {
     name: "",
@@ -101,10 +104,13 @@ export default function AddBookings(props) {
         var res = await BookingApiCall.addBooking(newdata)
         if (res.status === 400){
             // Lỗi bad request thông báo lỗi
+
             console.log('booked failed')
+            setOpenDialogFail(true)
         }
         if (res.status === 201){
             // Thông báo đặt phòng thành công
+            setOpenDialogSuccess(true)
             console.log('booked successfully')
         }
         
@@ -159,6 +165,8 @@ export default function AddBookings(props) {
   return (
     <div>
       <Dialog maxWidth='md' open={open} TransitionComponent={Transition} keepMounted onClose={handleClose} aria-labelledby="alert-dialog-slide-title" aria-describedby="alert-dialog-slide-description">
+            <SuccessSnackbars open={openDialogSuccess} setOpen={setOpenDialogSuccess}></SuccessSnackbars>
+            <FailSnackbars open={openDialogFail} setOpen={setOpenDialogFail}></FailSnackbars>
             <DialogTitle id="alert-dialog-slide-title">
               <Box className={classes.dialogTitle}>
                 <b>Add Bookings</b>
