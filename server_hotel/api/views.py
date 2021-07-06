@@ -37,7 +37,6 @@ def BookingRender(request):
     return  JsonResponse(info,safe=False)
 # dữ liệu để render trong trang service 
 @api_view(['GET'])
-@permission_classes([AllowAny]) # remove this 
 def ServiceRender(request):
     info = list(Service.objects.select_related().filter(is_canceled='false').values(Type=F('type__title'),
                                                                                     Unit_price=F('type__unit_price'),

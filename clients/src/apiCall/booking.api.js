@@ -54,7 +54,7 @@ class BookingApiCall{
             })
         if (res.status === 403){
             await AuthApiCall.refreshToken()
-            return this.addBooking(data)
+            return this.EditBooking(data)
         }
         else
             return res 

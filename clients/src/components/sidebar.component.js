@@ -1,5 +1,5 @@
 import {Box,List,ListSubheader,ListItem,ListItemIcon,ListItemText,makeStyles} from '@material-ui/core'
-import {AttachMoney,MoneyOff,RoomServiceOutlined,BorderColorOutlined} from '@material-ui/icons';
+import {AttachMoney,MoneyOff,RoomServiceOutlined,BorderColorOutlined,Search} from '@material-ui/icons';
 import React,{useState} from 'react';
 import AddBookings from './dialog/addBooking';
 import EditBookings from './dialog/editBooking';
@@ -145,9 +145,9 @@ export function RoomSideBar(props){
                     >
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <AttachMoney />
+                        <Search />
                         </ListItemIcon>
-                        <ListItemText primary="Category 1" />
+                        <ListItemText primary="Tìm phòng" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>

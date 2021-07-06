@@ -17,7 +17,7 @@ class InvoiceApiCall {
         }) 
         if (res.status === 403){
             await AuthApiCall.refreshToken()
-            return this.getUnpaidBill()
+            return this.getUnpaidBill(phone)
         }
         else return res
     }

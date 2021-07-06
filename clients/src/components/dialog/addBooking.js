@@ -105,14 +105,11 @@ export default function AddBookings(props) {
         var res = await BookingApiCall.addBooking(newdata)
         if (res.status === 400){
             // Lỗi bad request thông báo lỗi
-
-            console.log('booked failed')
             setOpenDialogFail(true)
         }
         if (res.status === 201){
             // Thông báo đặt phòng thành công
             setOpenDialogSuccess(true)
-            console.log('booked successfully')
         }
         
         setFormInput({...initialState})
