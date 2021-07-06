@@ -65,7 +65,6 @@ const getDay = () =>{
 export default function AddBookings(props) {
   const {open,handleClose,roomSelected} = props
   const classes = useStyles()
-  //const room_booked = roomSelected.length ? roomSelected[0].id_room : ''
   const initialState = {
     name: "",
     email: "",
