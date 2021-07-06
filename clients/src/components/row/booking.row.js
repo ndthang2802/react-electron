@@ -73,7 +73,7 @@ export default function BookingRow(props){
 
     const onClickShow = (e) =>{
         setExpanded(true)
-        if (e.target.parentNode.id === 'name'){
+        if (e.target.parentNode.id === 'Name'){
             setClientExpanded(true)
             setRoomExpanded(false)
         }
@@ -89,12 +89,12 @@ export default function BookingRow(props){
     useEffect(()=>{
         const getMoreInfo = async(info) =>{
             try {
-                if (info === 'name'){
+                if (info === 'Name'){
                     // more client's info
-                    var res = await ClientApi.getClientInfoByPhone(row.phone)
+                    var res = await ClientApi.getClientInfoByPhone(row.Phone)
                     setInfoShow(res)
                 }
-                else if (info === 'number'){
+                else if (info === 'Number'){
                     // more room's info
                     res = await RoomApiCall.getRoomById(row.id_room)
                     setInfoShow(res)
@@ -107,7 +107,7 @@ export default function BookingRow(props){
         getMoreInfo(dup)
     },[dup,row.phone,row.id_room])
     const onClickClose = (e) =>{
-        if (e.target.parentNode.id === 'name'){
+        if (e.target.parentNode.id === 'Name'){
             setClientExpanded(false)
         }
         else{
@@ -135,13 +135,13 @@ export default function BookingRow(props){
                 return (
                         <TableCell component="th" id={labelId} scope="row" style={{padding:'1'}} align="right" key={index} >
                             {
-                                !['name','number'].includes(Header)  ? 
+                                !['Name','Number'].includes(Header)  ? 
                                 <Typography component={'div'} >{row[Header].toString()}</Typography>
                                 :
                                 <Box display='flex' flexWrap='wrap' justifyContent='flex-end' >
                                     <Typography>{row[Header].toString()}</Typography>
                                     {
-                                        Header === 'name' ?
+                                        Header === 'Name' ?
                                         clientExpanded ?
                                             <span id={Header} ><ExpandLessOutlined onClick={onClickClose} className='icon_hover_bottom'  /></span>
                                             : 

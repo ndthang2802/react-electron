@@ -29,7 +29,7 @@ export default function TableHeader(props){
                                 direction={orderBy === CellHeader.label ? order : "asc"}
                                 onClick={createSortHandler(CellHeader.label)}
                                 >
-                                <b>{CellHeader.label}</b>
+                                <b>{CellHeader.label.replaceAll('_',' ')}</b>
                                 {orderBy === CellHeader.label ? (
                                     <span className={styles.visuallyHidden}>
                                     {order === "desc" ? "sorted descending" : "sorted ascending"}

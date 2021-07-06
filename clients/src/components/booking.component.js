@@ -35,7 +35,7 @@ export default function Bookings(){
 
     const [selected, setSelected] = useState([]);
     const [emptySelected, setEmptySelected] = useState([]);
-    const Headers = ['name','phone','Start_at','Check_out_at','floor','number']
+    const Headers = ['Name','Phone','Start_at','Check_out_at','Floor','Number']
     const RoomHeaders = ['Category','Price','Floor','Number']
     return (
         <React.Fragment>

@@ -27,15 +27,15 @@ from django.db.models.functions import Trunc
 # dữ liệu để render trong trang booking 
 @api_view(['GET'])
 def BookingRender(request):
-    info = list(Roomrentals.objects.select_related().filter(room__status__is_available='false').values(name=F('client__fullname'),
-                                                                                                    phone=F('client__phone'),
-                                                                                                    floor=F('room__floor'),
-                                                                                                    number=F('room__number'),
+    info = list(Roomrentals.objects.select_related().filter(room__status__is_available='false').values(Name=F('client__fullname'),
+                                                                                                    Phone=F('client__phone'),
+                                                                                                    Floor=F('room__floor'),
+                                                                                                    Number=F('room__number'),
                                                                                                     Start_at=F('start_at'),
                                                                                                     Check_out_at= F('check_out_at'),
                                                                                                     id_room=F('room__id'),id_rental=F('id')   ))                                                                                            
     return  JsonResponse(info,safe=False)
-# dữ liệu để render trong trang service 
+# dữ liệu để render trong trang service (50 cái)
 @api_view(['GET'])
 def ServiceRender(request):
     info = list(Service.objects.select_related().filter(is_canceled='false').values(Type=F('type__title'),
@@ -44,7 +44,7 @@ def ServiceRender(request):
                                                                                     Quantity=F('quantity'),
                                                                                     Sub_total=F('sub_total'),
                                                                                     Detail=F('detail'),
-                                                                                    Id=F('id') ))
+                                                                                    Id=F('id') ))[:50]
     return  JsonResponse(info,safe=False)
 # dữ liệu render khi thanh toán
 @api_view(['POST'])
@@ -77,6 +77,13 @@ def StaffInfo(request):
     staffs = get_user_model()
     staff = list(staffs.objects.filter(id=request.user.id).values(Staff=F('fullname')))
     return JsonResponse(staff,safe=False)
+
+# Dữ liệu render trong trang Room -> lấy 50 room đầu tiên
+@api_view(['GET'])
+#@permission_classes([AllowAny]) # remove this 
+def getRoomRender(request):
+    rooms = list(Rooms.objects.select_related().values(Category=F('category__name'),Floor=F('floor'),Number=F('number'),Status=F('status__is_available'),Price=F('category__price')   ))[:50]
+    return JsonResponse(rooms,safe=False)
 #-----------------------API liên quan tới room client -----------------------------#
 
 # lấy thông tin client từ số điện thoại

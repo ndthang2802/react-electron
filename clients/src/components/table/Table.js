@@ -6,10 +6,8 @@ import {Paper, TableContainer,Table,TableBody,TableRow,TableCell,TablePagination
 import TableHeader from './TableHead';
 import { generateCellHead,stableSort,getComparator} from './tableFunction';
 
-import InvoiceRow from '../row/invoice.row';
-import RoomRow from '../row/room.row';
+import CommonRow from '../row/common.row';
 import BookingRow from '../row/booking.row';
-import ServiceRow from '../row/services.row';
 
 
 export default function EnhancedTable(props) {
@@ -99,10 +97,10 @@ export default function EnhancedTable(props) {
                                 const isItemSelected = isSelected(row);
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
-                                  tableName === 'Invoices' ?
-                                    <InvoiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                  tableName === 'Rooms' ?
+                                    <CommonRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                   : tableName === 'Services' ?
-                                    <ServiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                    <CommonRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />  
                                   :
                                     <BookingRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                 );

@@ -42,6 +42,8 @@ urlpatterns = [
     re_path(r'^unpaidbill/$', views.UnPaidBill),
     # 4. Get staff infomation
     re_path(r'^staff/$', views.StaffInfo ),
+    # 4. Room render (50 rooms)
+    re_path(r'^renderroom/$', views.getRoomRender ),
     
 
 ]
