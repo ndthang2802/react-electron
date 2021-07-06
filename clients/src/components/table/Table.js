@@ -19,32 +19,7 @@ export default function EnhancedTable(props) {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const handleSelectAllClick = (event) => {
-      if (event.target.checked) {
-        const newSelecteds = data.map((n) => n);
-        setSelected(newSelecteds);
-        return;
-      }
-      setSelected([]);
-    };
-/*     const handleClick = (event, name) => {
-      const selectedIndex = selected.indexOf(name);
-      let newSelected = [];
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1)
-        );
-      }
     
-      setSelected(newSelected);
-    }; */
     const handleClick = (event, name) => {
       if (selected[0] === name)
       {
@@ -87,8 +62,7 @@ export default function EnhancedTable(props) {
                           numberRow= {data.length} 
                           order={order}
                           orderBy={orderBy}
-                          handleRequestSort = {handleRequestSort}
-                          handleSelectAllClick={handleSelectAllClick} />
+                          handleRequestSort = {handleRequestSort} />
                         <TableBody>
                           {
                             stableSort(data, getComparator(order, orderBy))
