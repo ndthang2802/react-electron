@@ -196,7 +196,7 @@ export function ServiceSideBar(props){
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <MoneyOff />
+                        <BorderColorOutlined />
                         </ListItemIcon>
                         <ListItemText primary="Update" />
                     </ListItem>

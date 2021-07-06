@@ -25,19 +25,13 @@ function MoreInfo(props){
                             Detail
                         </Typography>
                         <Table size="small" aria-label="purchases">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Key</TableCell>
-                                    <TableCell>Value</TableCell>
-                                </TableRow>
-                            </TableHead>
                             <TableBody>
                                 {
                                     infoShow ? 
                                      Object.keys(infoShow[0]).map((key,index)=>{
                                          return (
                                              <TableRow key={index}>
-                                                 <TableCell>{key}</TableCell>
+                                                 <TableCell><b>{key}</b></TableCell>
                                                  <TableCell>{infoShow[0][key]}</TableCell>
                                              </TableRow>
                                          )

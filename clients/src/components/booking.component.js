@@ -40,7 +40,7 @@ export default function Bookings(){
     return (
         <React.Fragment>
       
-          <Grid container item xs={4} sm={2}>
+          <Grid container item xs={4} sm={2} >
             <BookingSideBar roomSelected = {emptySelected} bookingSelected = {selected} />
           </Grid>
           <Grid container item xs={12} sm={10} style={{'paddingRight':'1rem'}}>
