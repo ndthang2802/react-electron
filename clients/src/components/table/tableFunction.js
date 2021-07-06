@@ -4,7 +4,8 @@ export function generateCellHead(object, headers){
   for (let header of headers) {
           var temp = {
           id : i,
-          isNumeric: !isNaN(object[header]),
+          //isNumeric: !isNaN(object[header]),
+          isNumeric: false,
           disablePadding : i===0 ? true : false,
           label: header
           }

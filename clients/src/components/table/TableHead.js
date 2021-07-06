@@ -11,9 +11,9 @@ export default function TableHeader(props){
             <TableRow>
                 <TableCell padding= 'checkbox'>
                     <Checkbox 
+                        style = {{visibility: "hidden"}}
                         checked = {numberSelected > 0 && numberSelected === numberRow}
                         indeterminate = {numberSelected > 0 && numberSelected < numberRow}
-                        onChange = {handleSelectAllClick}
                         inputProps={{ 'aria-label': 'select all' }}
                     />
                 </TableCell>
