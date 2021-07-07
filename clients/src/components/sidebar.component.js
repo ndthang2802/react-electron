@@ -1,8 +1,19 @@
 import {Box,List,ListSubheader,ListItem,ListItemIcon,ListItemText,makeStyles} from '@material-ui/core'
 import {AttachMoney,MoneyOff,RoomServiceOutlined,BorderColorOutlined,Search} from '@material-ui/icons';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'; 
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import UpdateIcon from '@material-ui/icons/Update';
+import FilterNoneIcon from '@material-ui/icons/FilterNone';
+import Filter1Icon from '@material-ui/icons/Filter1';
+import Filter2Icon from '@material-ui/icons/Filter2';
+import RoomServiceRoundedIcon from '@material-ui/icons/RoomServiceRounded';
 import React,{useState} from 'react';
 import AddBookings from './dialog/addBooking';
 import EditBookings from './dialog/editBooking';
+import AddCommentTwoToneIcon from '@material-ui/icons/AddCommentTwoTone';
+import DnsTwoToneIcon from '@material-ui/icons/DnsTwoTone';
+import EmojiFoodBeverageTwoToneIcon from '@material-ui/icons/EmojiFoodBeverageTwoTone';
+
 import Warning from './dialog/warning';
 const SideBarStyle = makeStyles((theme) => ({
     root: {
@@ -70,19 +81,19 @@ export function BookingSideBar(props){
                         >
                         <ListItem button className='hover_left' onClick={AddBookingOpen} >
                             <ListItemIcon>
-                            <AttachMoney />
+                            <AddCommentTwoToneIcon />
                             </ListItemIcon>
                             <ListItemText primary="Add Booking" />
                         </ListItem>
                         <ListItem button className='hover_left' >
                             <ListItemIcon>
-                            <RoomServiceOutlined />
+                            <EmojiFoodBeverageTwoToneIcon />
                             </ListItemIcon>
                             <ListItemText primary="Add service" />
                         </ListItem>
                         <ListItem button className='hover_left' onClick={EditBookingOpen} >
                             <ListItemIcon>
-                            <BorderColorOutlined />
+                            <DnsTwoToneIcon />
                             </ListItemIcon>
                             <ListItemText primary="Update Booking" />
                         </ListItem>
@@ -112,13 +123,13 @@ export function InvoiceSideBar(props){
                     >
                     <ListItem button className='hover_left'>
                         <ListItemIcon>
-                        <AttachMoney />
+                        <Filter1Icon />
                         </ListItemIcon>
                         <ListItemText primary="Option 1" />
                     </ListItem>
                     <ListItem button className='hover_left'>
                         <ListItemIcon>
-                        <MoneyOff />
+                        <Filter2Icon />
                         </ListItemIcon>
                         <ListItemText primary="Option 2" />
                     </ListItem>
@@ -145,19 +156,19 @@ export function RoomSideBar(props){
                     >
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <Search />
+                        <RoomServiceRoundedIcon />
                         </ListItemIcon>
                         <ListItemText primary="Dịch vụ 1" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <MoneyOff />
+                        <RoomServiceRoundedIcon />
                         </ListItemIcon>
                         <ListItemText primary="Dịch vụ 2" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <MoneyOff />
+                        <RoomServiceRoundedIcon />
                         </ListItemIcon>
                         <ListItemText primary="Dịch vụ 3" />
                     </ListItem>
@@ -184,25 +195,25 @@ export function ServiceSideBar(props){
                     >
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <AttachMoney />
+                        <AddCircleOutlineIcon />
                         </ListItemIcon>
                         <ListItemText primary="Add" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <MoneyOff />
+                        <HighlightOffIcon />
                         </ListItemIcon>
                         <ListItemText primary="Delete" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <BorderColorOutlined />
+                        <UpdateIcon />
                         </ListItemIcon>
                         <ListItemText primary="Update" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <MoneyOff />
+                        <FilterNoneIcon />
                         </ListItemIcon>
                         <ListItemText primary="Filter" />
                     </ListItem>
