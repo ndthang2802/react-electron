@@ -11,7 +11,10 @@ Clone from github:
 ```sh 
 git clone https://github.com/ndthang2802/react-electron.git
 ```
-Run this command
+
+## Client
+
+Run this command (in both folder clients and root-folder)
 ```sh 
 npm install
 npm install @material-ui/lab@4.0.0-alpha.59
@@ -29,7 +32,7 @@ npm run start
 To lauch server
 
 - Setting database (change file server_hotel/setting.py) 
-- You can use the csv file in folder SQL_DATA to insert to your database
+
 ```python
 DATABASES = {
   'default': {
@@ -42,8 +45,9 @@ DATABASES = {
   }
 }
 ```
- - > Change NAME, USER and PASSWORD 
- - > Install some python module
+  > Change NAME, USER and PASSWORD 
+ - You can use the csv file in folder SQL_DATA to insert to your database
+ -  Install some python module
 ```
 Django (version > 3.1)
 pyJWT
@@ -51,15 +55,20 @@ mysqlclient
 djangorestframework
 django-cors-headers
 ```
-
-- Run command
+## Server
+To lauch server:
+```sh
+cd .\server_hotel\ 
+```
+Then go step by step:
+- Run command 
 
 ```sh
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-- To create account for login:
+- Create account for login:
 
 ```sh
 python manage.py createsuperuser
