@@ -13,7 +13,36 @@ const styles = makeStyles((theme)=> ({
         cursor: 'pointer',
     }
 })) 
+
 function MoreInfo(props){
+    String.prototype.replaceAt = function(index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    }
+    const handleStringHeader = (str_)=>{
+        if(str_ === "isAvailable"){
+            return "Is Available"
+        }
+        else if(str_ === "fullname"){
+            return "Full Name"
+        }
+        else{
+            let str = (' ' + str_).slice(1);
+            const h = str.length;
+            str = str.toLowerCase()
+            str = str.replaceAt(0,str[0].toUpperCase())
+            for(let i = 0 ; i< h; ){
+                if(str[i] === '_'){
+                    str = str.replaceAt(i,' ')
+                    if(i+1<h){
+                        str = str.replaceAt(i+1,str[i+1].toUpperCase())
+                    }
+                }
+                i++;
+            }
+            return str 
+        }
+
+    }
     const {expanded,style,infoShow} = props
    
     return (
@@ -25,13 +54,23 @@ function MoreInfo(props){
                             Detail
                         </Typography>
                         <Table size="small" aria-label="purchases">
+
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell style={{fontWeight: "bold",fontSize :"15px"}}>Key</TableCell>
+                                    <TableCell style={{fontWeight: "bold",fontSize :"15px"}}>Value</TableCell>
+                                </TableRow>
+                            </TableHead>
+
                             <TableBody>
                                 {
                                     infoShow ? 
                                      Object.keys(infoShow[0]).map((key,index)=>{
                                          return (
                                              <TableRow key={index}>
-                                                 <TableCell><b>{key}</b></TableCell>
+
+                                                 <TableCell>{handleStringHeader(key)}</TableCell>
+
                                                  <TableCell>{infoShow[0][key]}</TableCell>
                                              </TableRow>
                                          )

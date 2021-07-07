@@ -69,3 +69,58 @@ export  function FailSnackbars(props) {
     </div>
   );
 }
+
+
+export  function SuccessEditBooking(props) {
+  const {open,setOpen} = props
+  const classes = useStyles();
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="info">
+        Edit booking success
+        </Alert>
+      </Snackbar>
+    </div>
+  );
+}
+
+export  function FailEditBooking(props) {
+  const {open,setOpen} = props
+  const classes = useStyles();
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+        Edit booking failed
+        </Alert>
+      </Snackbar>
+    </div>
+  );
+}
