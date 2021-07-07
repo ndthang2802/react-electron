@@ -13,7 +13,8 @@ git clone https://github.com/ndthang2802/react-electron.git
 ```
 Run this command
 ```sh 
-npm install concurrently wait-on cross-env @material-ui/core
+npm install
+npm install @material-ui/lab@4.0.0-alpha.59
 ```
 
 To lauch application:
@@ -28,7 +29,7 @@ npm run start
 To lauch server
 
 - Setting database (change file server_hotel/setting.py) 
-
+- You can use the csv file in folder SQL_DATA to insert to your database
 ```python
 DATABASES = {
   'default': {
@@ -41,22 +42,31 @@ DATABASES = {
   }
 }
 ```
-
-  > Change NAME, USER and PASSWORD 
-
-
+ - > Change NAME, USER and PASSWORD 
+ - > Install some python module
+```
+Django (version > 3.1)
+pyJWT
+mysqlclient
+djangorestframework
+django-cors-headers
+```
 
 - Run command
 
 ```sh
 python manage.py makemigrations
 python manage.py migrate
-python manage.py runserver
 ```
 
-To create account for login:
+- To create account for login:
 
 ```sh
 python manage.py createsuperuser
 ```
 
+- Run the server
+
+```
+python manage.py runserver
+```
