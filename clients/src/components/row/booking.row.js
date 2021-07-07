@@ -117,7 +117,7 @@ export default function BookingRow(props){
             role="checkbox"
             aria-checked={isItemSelected}
             tabIndex={-1}
-            key={row[Object.keys(row)[1]]}
+            key={labelId}
             selected={isItemSelected}
             className = {style.hover}
           >
@@ -130,7 +130,7 @@ export default function BookingRow(props){
                         <TableCell component="th" id={labelId} scope="row" style={{padding:'1'}} align="right" key={index} >
                             {
                                 !['Name','Number'].includes(Header)  ? 
-                                <Typography component={'div'} >{row[Header].toString()}</Typography>
+                                <Typography component={'div'} >{row[Header].toString().match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/) ? row[Header].toString().replace('T','  ').replace('Z',' ') : row[Header].toString() }</Typography>
                                 :
                                 <Box display='flex' flexWrap='wrap' justifyContent='flex-end' >
                                     <Typography>{row[Header].toString()}</Typography>

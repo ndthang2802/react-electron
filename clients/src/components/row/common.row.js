@@ -1,5 +1,5 @@
-import React,{useState} from 'react';
-import {TableRow,TableCell,Checkbox,Collapse,Typography, Box,Table,TableBody,TableHead,makeStyles,List,ListItem,ListItemText} from '@material-ui/core'
+import React from 'react';
+import {TableRow,TableCell,Checkbox,Typography,makeStyles} from '@material-ui/core'
 
 
 const styles = makeStyles((theme)=> ({
@@ -12,7 +12,7 @@ const styles = makeStyles((theme)=> ({
         cursor: 'pointer'
     }
 })) 
-export default function RoomRow(props){
+export default function CommonRow(props){
     const style = styles() 
     const {row,handleClick,isItemSelected,labelId,Headers} = props
   
@@ -24,7 +24,7 @@ export default function RoomRow(props){
             role="checkbox"
             aria-checked={isItemSelected}
             tabIndex={-1}
-            key={row[Object.keys(row)[1]]}
+            keys={row.Id_room}
             selected={isItemSelected}
             className = {style.hover}
           >
@@ -34,8 +34,14 @@ export default function RoomRow(props){
             {
                Headers.map((Header,index)=>{
                     return (
-                            <TableCell component="th" id={labelId} scope="row" style={{'padding':'1'}} align="right" key={row[Header]} >
-                                    <Typography component={'div'} >{row[Header].toString()}</Typography>
+                            <TableCell component="th" id={labelId} scope="row" style={{'padding':'1'}} align="right" key={index} >
+                                    <Typography component={'div'} >
+                                    {
+                                        row[Header].toString().match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/) ?
+                                        row[Header].toString().replace('T','  ').replace('Z',' ') 
+                                        : row[Header].toString() 
+                                     }
+                                    </Typography>
                             </TableCell>
                     )
                     

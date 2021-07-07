@@ -110,6 +110,16 @@ export default function Invoice(){
       setOpenBill(false)
       setBillSelected(false)
     }
+    const TinhTien = async() =>{
+      var data = {'id_rental':billSelected.id_rental}
+      var res = await invoiceApiCall.PayBill(data)
+      if (res.status === 204){
+        console.log('pay success')
+      }
+      else {
+        console.log('pay fail cmnr')
+      }
+    }
     return (
         <Grid container spacing={3}>
           <Grid item xs={12} sm={2}>
@@ -140,6 +150,7 @@ export default function Invoice(){
                           <CancelPresentationOutlined onClick={closeError} />
                         </Box> 
                       : unpaidBill ?
+                      <Paper style={{width:'100%'}}>
                         <Table>
                           <TableHead>
                               <TableRow><TableCell className={classes.title} colSpan={7} >- Hóa đơn</TableCell></TableRow>
@@ -169,13 +180,17 @@ export default function Invoice(){
                             }
                           </TableBody>
                         </Table>
+                        </Paper>
                       : null
                     }
                   </Grid>
                   <Grid container item xs={12} sm={12}>
                       {
                         openBill ? 
-                        <Box className={classes.bill}>
+                        <React.Fragment>
+                        <Grid item xs={12} sm={1}></Grid>
+                        <Grid item xs={12} sm={10}>
+                        <Paper className={classes.bill}>
                           <Grid container spacing={3}>
                           <Grid item xs={12} sm={12} className={classes.end} >
                             <Button variant="outlined" color="secondary" onClick={()=>{setOpenBill(false)}}>
@@ -198,6 +213,7 @@ export default function Invoice(){
                               <p style={{textIndent:'1rem'}}><b>Số điện thoại: </b>{billSelected.phone}</p>
                             </Grid>
                             <Grid item xs={12} sm={12}>
+                              <Paper>
                               <Table>
                                 <TableHead>
                                     <TableRow>
@@ -215,14 +231,18 @@ export default function Invoice(){
                                         </TableRow>
                                 </TableBody>
                               </Table>
+                              </Paper>
                             </Grid>
                             <Grid item xs={12} sm={12} className={classes.end}>
-                              <Button type="button"  className={classes.button}   >
+                              <Button type="button"  className={classes.button} onClick={TinhTien}  >
                                       Xác nhận <FindInPageOutlined className={classes.rightIcon}/>
                                 </Button>
                             </Grid>
                           </Grid>
-                        </Box>
+                          </Paper>
+                          </Grid>
+                        <Grid item xs={12} sm={1}></Grid>
+                        </React.Fragment>
                         :null
                       }
                     </Grid>

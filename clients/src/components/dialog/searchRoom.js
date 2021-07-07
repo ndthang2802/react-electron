@@ -64,8 +64,8 @@ export default function SearchRoom(props) {
     const [floor,setFloor]  = useState()
     const [number,setNumber]  = useState()
     const clearAll = () =>{
-        
-
+        setFloor('')
+        setNumber('')
     }
     useEffect(()=>{
         clearAll()
@@ -75,8 +75,13 @@ export default function SearchRoom(props) {
         
         
     };
-    const handleChange = (event) => {
-        setAge(event.target.value);
+    const handleChange = (e) => {
+        if (e.target.id === 'select-floor'){
+          setFloor(e.target.value)
+        }
+        if (e.target.id === 'select-number'){
+          setNumber(e.target.value)
+        }
     };
   
   return (
@@ -99,9 +104,13 @@ export default function SearchRoom(props) {
                             value={floor}
                             onChange={handleChange}
                             >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            {
+                              [...Array(10).keys()].map((key)=>{
+                                return (
+                                    <MenuItem value={key+1}>{key+1}</MenuItem>   
+                                )
+                              })  
+                            }
                             </Select>
                         </FormControl>
                     </Grid>
@@ -114,9 +123,13 @@ export default function SearchRoom(props) {
                             value={age}
                             onChange={handleChange}
                             >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
+                            {
+                              [...Array(10).keys()].map((key)=>{
+                                return (
+                                    <MenuItem value={key+1}>{key+1}</MenuItem>   
+                                )
+                              })  
+                            }
                             </Select>
                         </FormControl>
                     </Grid>
@@ -130,7 +143,7 @@ export default function SearchRoom(props) {
                 </Button>
                 
                 <Button type="submit" variant="contained"  color="primary" className={classes.button} onClick={handleSubmit} >
-                  Book <MonetizationOnOutlined className={classes.rightIcon}/>
+                  Find <MonetizationOnOutlined className={classes.rightIcon}/>
                 </Button>
               </Box>
             </Grid>
