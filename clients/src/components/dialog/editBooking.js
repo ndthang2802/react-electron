@@ -5,6 +5,7 @@ import DatePickers from './DatePickers';
 import { ValidateEditBooking,hasError,completeEditData } from '../function/validate.Booking';
 import ClientApiCall from '../../apiCall/client.api'
 import BookingApiCall from '../../apiCall/booking.api'
+import {SuccessEditBooking,FailEditBooking } from "./addBookSuccessAndFail"
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -83,6 +84,8 @@ var initialState = {
   id_rental: ""
 }
 export default function EditBookings(props) {
+  const [openDialogSuccess,setOpenDialogSuccess] =useState(false) 
+  const [openDialogFail,setOpenDialogFail] =useState(false) 
   const {open,handleClose,bookingSelected} = props
   const classes = useStyles()
   const [currentClient,setCurrentClient] = useState()
@@ -155,9 +158,11 @@ export default function EditBookings(props) {
         var res = await BookingApiCall.EditBooking(newdata)
         if (res.status === 204){
           console.log('Edit success') // thông báo thành công
+          setOpenDialogSuccess(true)
         }
         else if (res.status === 400){
           console.log('edit failed') // thông báo lỗi
+          setOpenDialogFail(true)
         }
 
         setFormInput({...initialState})
@@ -215,6 +220,8 @@ export default function EditBookings(props) {
         TransitionComponent={Transition} keepMounted
         onClose={handleClose} aria-labelledby="alert-dialog-slide-title" aria-describedby="alert-dialog-slide-description"
       >
+          <SuccessEditBooking open={openDialogSuccess} setOpen={setOpenDialogSuccess}></SuccessEditBooking>
+            <FailEditBooking open={openDialogFail} setOpen={setOpenDialogFail}></FailEditBooking>
             <DialogTitle id="alert-dialog-slide-title">
               <Box className={classes.dialogTitle}>
                 <b>Edit Bookings</b>

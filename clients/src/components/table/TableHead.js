@@ -6,6 +6,31 @@ export default function TableHeader(props){
     const createSortHandler = (property) => (event) => {
         handleRequestSort(event, property);
       };
+      String.prototype.replaceAt = function(index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    }
+    const handleStringHeader = (str_)=>{
+        if(str_ === "isAvailable"){
+            return "Available"
+        }
+        else{
+            let str = (' ' + str_).slice(1);
+            const h = str.length;
+            str = str.toLowerCase()
+            str = str.replaceAt(0,str[0].toUpperCase())
+            for(let i = 0 ; i< h; ){
+                if(str[i] === '_'){
+                    str = str.replaceAt(i,' ')
+                    if(i+1<h){
+                        str = str.replaceAt(i+1,str[i+1].toUpperCase())
+                    }
+                }
+                i++;
+            }
+            return str 
+        }
+
+    }
     return (
         <TableHead>
             <TableRow>
@@ -20,6 +45,7 @@ export default function TableHeader(props){
                 {
                     CellHeaders ? 
                     CellHeaders.map((CellHeader)=>(
+                        
                         <TableCell key={CellHeader.id} 
                                     padding={CellHeader.disablePadding ? 'none' : 'default'} 
                                     align = {CellHeader.isNumberic ? 'left' : 'right'} 
@@ -29,7 +55,8 @@ export default function TableHeader(props){
                                 direction={orderBy === CellHeader.label ? order : "asc"}
                                 onClick={createSortHandler(CellHeader.label)}
                                 >
-                                <b>{CellHeader.label}</b>
+                                    
+                                <b style={{fontSize :"16px"}}>{handleStringHeader(CellHeader.label) }</b>
                                 {orderBy === CellHeader.label ? (
                                     <span className={styles.visuallyHidden}>
                                     {order === "desc" ? "sorted descending" : "sorted ascending"}
