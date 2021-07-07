@@ -2,7 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types'
 import { TableHead,TableRow, TableCell, Checkbox,TableSortLabel } from '@material-ui/core';
 export default function TableHeader(props){
-    const {styles,order,orderBy,numberSelected,numberRow,CellHeaders,handleSelectAllClick,handleRequestSort} = props
+    const {styles,order,orderBy,numberSelected,numberRow,CellHeaders,handleRequestSort} = props
     const createSortHandler = (property) => (event) => {
         handleRequestSort(event, property);
       };
@@ -21,7 +21,7 @@ export default function TableHeader(props){
                     CellHeaders ? 
                     CellHeaders.map((CellHeader)=>(
                         <TableCell key={CellHeader.id} 
-                                    padding={CellHeader.disablePadding ? 'none' : 'default'} 
+                                    padding={CellHeader.disablePadding ? 'none' : 'normal'} 
                                     align = {CellHeader.isNumberic ? 'left' : 'right'} 
                                     sortDirection={orderBy === CellHeader.label ? order : false}>
                             <TableSortLabel
@@ -49,7 +49,6 @@ TableHeader.propTypes = {
     styles: propTypes.object.isRequired,
     numberSelected: propTypes.number.isRequired,
     handleRequestSort: propTypes.func.isRequired,
-    handleSelectAllClick: propTypes.func.isRequired,
     order: propTypes.oneOf(["asc", "desc"]).isRequired,
     orderBy: propTypes.string.isRequired,
     numberRow: propTypes.number.isRequired

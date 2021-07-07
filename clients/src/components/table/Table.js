@@ -72,9 +72,9 @@ export default function EnhancedTable(props) {
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
                                   tableName === 'Rooms' ?
-                                    <CommonRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                    <CommonRow key={`ROW+${index}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                   : tableName === 'Services' ?
-                                    <CommonRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />  
+                                    <CommonRow key={`ROW+${index}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />  
                                   :
                                     <BookingRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                 );
@@ -93,8 +93,8 @@ export default function EnhancedTable(props) {
                     count={data.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                   />
             </Paper>
             <FormControlLabel
