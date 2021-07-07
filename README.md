@@ -29,8 +29,14 @@ cd clients
 npm run start
 ```
 
-To lauch server
 
+
+## Server
+To lauch server:
+```sh
+cd .\server_hotel\ 
+```
+Then go step by step:
 - Setting database (change file server_hotel/setting.py) 
 
 ```python
@@ -55,12 +61,6 @@ mysqlclient
 djangorestframework
 django-cors-headers
 ```
-## Server
-To lauch server:
-```sh
-cd .\server_hotel\ 
-```
-Then go step by step:
 - Run command 
 
 ```sh
