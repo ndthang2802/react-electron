@@ -18,7 +18,8 @@ urlpatterns = [
     re_path(r'^availablerooms/$', views.getAvailableRooms),
     # 2. Thông tin phòng từ id
     re_path(r'^room/(?P<id>[a-zA-Z0-9-]+)/$', views.getRoomById ),
-    
+    # 3. Thông tin phòng từ số lầu, số phòng
+    re_path(r'^room/(?P<floor>[0-9]+)/(?P<number>[0-9]+)/$', views.getRoomByFloorNumber ),
     
     #----------------  CLIENTS MODEL ------------------#
     
@@ -42,6 +43,10 @@ urlpatterns = [
     re_path(r'^unpaidbill/$', views.UnPaidBill),
     # 4. Get staff infomation
     re_path(r'^staff/$', views.StaffInfo ),
-    
+    # 4. Room render (50 rooms)
+    re_path(r'^renderroom/$', views.getRoomRender ),
+    # 5. Tính tiền
+    re_path(r'^paybill/$', views.PayBill ),
+
 
 ]

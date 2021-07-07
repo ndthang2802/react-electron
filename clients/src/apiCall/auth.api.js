@@ -34,7 +34,7 @@ class AuthApiCall{
             }
         }) 
         if (res.status === 403){
-            await AuthApiCall.refreshToken()
+            await this.refreshToken()
             return this.getStaffInfo()
         }
         if (res.status === 200){
@@ -55,7 +55,7 @@ class AuthApiCall{
               }
             })
         if (res.status === 403){
-            await AuthApiCall.refreshToken()
+            await this.refreshToken()
             return this.logOut()
         }
         if (res.status === 200){

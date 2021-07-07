@@ -147,19 +147,19 @@ export function RoomSideBar(props){
                         <ListItemIcon>
                         <Search />
                         </ListItemIcon>
-                        <ListItemText primary="Tìm phòng" />
+                        <ListItemText primary="Dịch vụ 1" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
                         <MoneyOff />
                         </ListItemIcon>
-                        <ListItemText primary="Category 2" />
+                        <ListItemText primary="Dịch vụ 2" />
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
                         <MoneyOff />
                         </ListItemIcon>
-                        <ListItemText primary="Category 3" />
+                        <ListItemText primary="Dịch vụ 3" />
                     </ListItem>
                 </List>
             </Box>
@@ -196,7 +196,7 @@ export function ServiceSideBar(props){
                     </ListItem>
                     <ListItem button className='hover_left' >
                         <ListItemIcon>
-                        <MoneyOff />
+                        <BorderColorOutlined />
                         </ListItemIcon>
                         <ListItemText primary="Update" />
                     </ListItem>

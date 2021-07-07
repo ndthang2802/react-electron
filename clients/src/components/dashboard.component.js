@@ -31,7 +31,6 @@ export default function Dashboard(props){
             }
         }
         getStaffInfo()
-        console.log(staff)
     }, [])
 
     const Clicked = (e) => {

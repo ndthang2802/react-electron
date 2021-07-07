@@ -6,10 +6,8 @@ import {Paper, TableContainer,Table,TableBody,TableRow,TableCell,TablePagination
 import TableHeader from './TableHead';
 import { generateCellHead,stableSort,getComparator} from './tableFunction';
 
-import InvoiceRow from '../row/invoice.row';
-import RoomRow from '../row/room.row';
+import CommonRow from '../row/common.row';
 import BookingRow from '../row/booking.row';
-import ServiceRow from '../row/services.row';
 
 
 export default function EnhancedTable(props) {
@@ -21,32 +19,7 @@ export default function EnhancedTable(props) {
     const [page, setPage] = useState(0);
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const handleSelectAllClick = (event) => {
-      if (event.target.checked) {
-        const newSelecteds = data.map((n) => n);
-        setSelected(newSelecteds);
-        return;
-      }
-      setSelected([]);
-    };
-/*     const handleClick = (event, name) => {
-      const selectedIndex = selected.indexOf(name);
-      let newSelected = [];
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1)
-        );
-      }
     
-      setSelected(newSelected);
-    }; */
     const handleClick = (event, name) => {
       if (selected[0] === name)
       {
@@ -89,8 +62,7 @@ export default function EnhancedTable(props) {
                           numberRow= {data.length} 
                           order={order}
                           orderBy={orderBy}
-                          handleRequestSort = {handleRequestSort}
-                          handleSelectAllClick={handleSelectAllClick} />
+                          handleRequestSort = {handleRequestSort} />
                         <TableBody>
                           {
                             stableSort(data, getComparator(order, orderBy))
@@ -99,10 +71,10 @@ export default function EnhancedTable(props) {
                                 const isItemSelected = isSelected(row);
                                 const labelId = `enhanced-table-checkbox-${index}`;
                                 return (
-                                  tableName === 'Invoices' ?
-                                    <InvoiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                  tableName === 'Rooms' ?
+                                    <CommonRow key={`ROW+${index}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                   : tableName === 'Services' ?
-                                    <ServiceRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
+                                    <CommonRow key={`ROW+${index}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />  
                                   :
                                     <BookingRow key={`ROW+${labelId}`} row={row} handleClick={handleClick} isItemSelected={isItemSelected} Headers={Headers} labelId={labelId} />
                                 );
@@ -121,8 +93,8 @@ export default function EnhancedTable(props) {
                     count={data.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                   />
             </Paper>
             <FormControlLabel

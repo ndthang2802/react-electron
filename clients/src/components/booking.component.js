@@ -35,12 +35,12 @@ export default function Bookings(){
 
     const [selected, setSelected] = useState([]);
     const [emptySelected, setEmptySelected] = useState([]);
-    const Headers = ['name','phone','Start_at','Check_out_at','floor','number']
+    const Headers = ['Name','Phone','Start_at','Check_out_at','Floor','Number']
     const RoomHeaders = ['Category','Price','Floor','Number']
     return (
         <React.Fragment>
       
-          <Grid container item xs={4} sm={2}>
+          <Grid container item xs={4} sm={2} >
             <BookingSideBar roomSelected = {emptySelected} bookingSelected = {selected} />
           </Grid>
           <Grid container item xs={12} sm={10} style={{'paddingRight':'1rem'}}>

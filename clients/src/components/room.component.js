@@ -1,299 +1,179 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import EnhancedTable from './table/Table'
 import {RoomSideBar} from './sidebar.component'
-import { Grid } from '@material-ui/core';
+import { Grid ,CircularProgress} from '@material-ui/core';
+import {TextField,makeStyles,Box,FormControl,Button,Slide,Select,InputLabel,MenuItem,Paper,Typography } from '@material-ui/core';
 
-const data = [
-    {
-      "id": 0,
-      "floor": 16,
-      "number": 70,
-      "category": {
-        "id": 0,
-        "name": "Savannah Fox",
-        "price": 809,
-        "notes": "235 Polhemus Place, Yettem, South Dakota, 1030"
-      },
-      "status": {
-        "id": 0,
-        "title": "Avis Kent",
-        "isAvailable": true,
-        "notes": "690 Stuyvesant Avenue, Wildwood, District Of Columbia, 4152"
-      }
-    },
-    {
-      "id": 1,
-      "floor": 15,
-      "number": 59,
-      "category": {
-        "id": 1,
-        "name": "Alfreda Duffy",
-        "price": 689,
-        "notes": "637 Trucklemans Lane, Benson, Northern Mariana Islands, 270"
-      },
-      "status": {
-        "id": 1,
-        "title": "Skinner Johns",
-        "isAvailable": true,
-        "notes": "795 Montrose Avenue, Wilmington, Palau, 1181"
-      }
-    },
-    {
-      "id": 2,
-      "floor": 1,
-      "number": 159,
-      "category": {
-        "id": 2,
-        "name": "Ashlee Roberts",
-        "price": 957,
-        "notes": "586 Victor Road, Woodruff, Virgin Islands, 947"
-      },
-      "status": {
-        "id": 2,
-        "title": "Alexander Barr",
-        "isAvailable": false,
-        "notes": "847 Nevins Street, Naomi, Alaska, 1344"
-      }
-    },
-    {
-      "id": 3,
-      "floor": 19,
-      "number": 77,
-      "category": {
-        "id": 3,
-        "name": "Kelley Cummings",
-        "price": 400,
-        "notes": "721 Seton Place, Coalmont, Utah, 9072"
-      },
-      "status": {
-        "id": 3,
-        "title": "Brandi Castro",
-        "isAvailable": false,
-        "notes": "103 Orange Street, Darlington, New York, 8988"
-      }
-    },
-    {
-      "id": 4,
-      "floor": 8,
-      "number": 66,
-      "category": {
-        "id": 4,
-        "name": "Finley Pollard",
-        "price": 783,
-        "notes": "321 Clifford Place, Loretto, Marshall Islands, 1811"
-      },
-      "status": {
-        "id": 4,
-        "title": "Lillian Casey",
-        "isAvailable": true,
-        "notes": "568 Montana Place, Alleghenyville, Wisconsin, 7054"
-      }
-    },
-    {
-      "id": 5,
-      "floor": 9,
-      "number": 168,
-      "category": {
-        "id": 5,
-        "name": "Dona Chen",
-        "price": 495,
-        "notes": "539 Atlantic Avenue, Waikele, West Virginia, 1003"
-      },
-      "status": {
-        "id": 5,
-        "title": "Dominguez Gilbert",
-        "isAvailable": false,
-        "notes": "861 Pleasant Place, Marysville, Rhode Island, 8800"
-      }
-    },
-    {
-      "id": 6,
-      "floor": 2,
-      "number": 198,
-      "category": {
-        "id": 6,
-        "name": "Newman Acosta",
-        "price": 119,
-        "notes": "827 Sunnyside Avenue, Delwood, Alabama, 1900"
-      },
-      "status": {
-        "id": 6,
-        "title": "Price Golden",
-        "isAvailable": true,
-        "notes": "195 Remsen Avenue, Morgandale, North Dakota, 8209"
-      }
-    },
-    {
-      "id": 7,
-      "floor": 5,
-      "number": 136,
-      "category": {
-        "id": 7,
-        "name": "Bertie Walters",
-        "price": 590,
-        "notes": "732 Ferry Place, Lacomb, Maryland, 7447"
-      },
-      "status": {
-        "id": 7,
-        "title": "Erna Chan",
-        "isAvailable": false,
-        "notes": "899 Lester Court, Otranto, Mississippi, 5827"
-      }
-    },
-    {
-      "id": 8,
-      "floor": 20,
-      "number": 117,
-      "category": {
-        "id": 8,
-        "name": "Rutledge Kaufman",
-        "price": 113,
-        "notes": "889 Rapelye Street, Tyhee, New Mexico, 9614"
-      },
-      "status": {
-        "id": 8,
-        "title": "Jana Keller",
-        "isAvailable": true,
-        "notes": "830 Claver Place, Hiwasse, Virginia, 5109"
-      }
-    },
-    {
-      "id": 9,
-      "floor": 6,
-      "number": 151,
-      "category": {
-        "id": 9,
-        "name": "Koch Rivers",
-        "price": 995,
-        "notes": "589 Knickerbocker Avenue, Rodanthe, Wyoming, 7619"
-      },
-      "status": {
-        "id": 9,
-        "title": "Newton Odom",
-        "isAvailable": false,
-        "notes": "552 Clarendon Road, Sunriver, New Hampshire, 3921"
-      }
-    },
-    {
-      "id": 10,
-      "floor": 20,
-      "number": 149,
-      "category": {
-        "id": 10,
-        "name": "Abbott Decker",
-        "price": 1000,
-        "notes": "328 Bevy Court, Gilmore, North Carolina, 3473"
-      },
-      "status": {
-        "id": 10,
-        "title": "Bettie Wilkinson",
-        "isAvailable": false,
-        "notes": "486 Townsend Street, Unionville, Oklahoma, 169"
-      }
-    },
-    {
-      "id": 11,
-      "floor": 1,
-      "number": 5,
-      "category": {
-        "id": 11,
-        "name": "Janette Harvey",
-        "price": 498,
-        "notes": "957 Wortman Avenue, Wescosville, American Samoa, 1350"
-      },
-      "status": {
-        "id": 11,
-        "title": "Milagros Ayala",
-        "isAvailable": false,
-        "notes": "684 Seabring Street, Hiko, Florida, 3474"
-      }
-    },
-    {
-      "id": 12,
-      "floor": 1,
-      "number": 169,
-      "category": {
-        "id": 12,
-        "name": "Shelby Mullins",
-        "price": 206,
-        "notes": "850 Everett Avenue, Ripley, Missouri, 2304"
-      },
-      "status": {
-        "id": 12,
-        "title": "Duffy Morse",
-        "isAvailable": true,
-        "notes": "676 Matthews Court, Sussex, Minnesota, 5309"
-      }
-    },
-    {
-      "id": 13,
-      "floor": 2,
-      "number": 30,
-      "category": {
-        "id": 13,
-        "name": "Anthony Wooten",
-        "price": 228,
-        "notes": "109 Cypress Court, Roberts, Indiana, 1996"
-      },
-      "status": {
-        "id": 13,
-        "title": "Lancaster Lawrence",
-        "isAvailable": false,
-        "notes": "101 Grove Street, Falmouth, Arkansas, 7267"
-      }
-    },
-    {
-      "id": 14,
-      "floor": 15,
-      "number": 149,
-      "category": {
-        "id": 14,
-        "name": "Mullins Burton",
-        "price": 647,
-        "notes": "381 Remsen Street, Teasdale, New Jersey, 6035"
-      },
-      "status": {
-        "id": 14,
-        "title": "Soto Love",
-        "isAvailable": true,
-        "notes": "426 Aster Court, Valle, Georgia, 3261"
-      }
-    }
-  ]
-function prepareRoomRenderData(data){
-    var data_handle = []
-    data.map((item)=>{
-        var item_handle  = {}
-        Object.keys(item).map((key)=>{
-           if (typeof(item[key]) !== 'object' ) {
-             item_handle[key] = item[key]
-           }
-           else {
-             Object.keys(item[key]).map((_)=>{
-               if (_ === 'name' | _ === 'price' || _ === 'notes' & key === 'category' || _ ==='isAvailable' ){
-                 item_handle[_] = item[key][_]
-                }
-                return null
-             })
-           }
-          return null
-        })
-        data_handle.push(item_handle)
-        return null
-    })
-    return data_handle
-}
+import RoomApiCall from '../apiCall/room.api';
+const useStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing(1)
+  },
+  leftIcon: {
+    marginRight: theme.spacing(1)
+  },
+  rightIcon: {
+    marginLeft: theme.spacing(1)
+  },
+  iconSmall: {
+    fontSize: 20
+  },
+  flexEnd: {
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'flex-end',
+    marginRight: '1rem'
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  paper: {
+    width: "100%",
+    marginBottom: theme.spacing(2),
+    minWidth: 750,
+    padding:'.5rem'
+  },
+  container:{
+    paddingRight :'1rem',
+    display: 'flex',
+    flexDirection: 'column',
+    gap:'1rem'
+  }
+}));
 export default function Rooms(){
-    const Headers = ['number','floor','name','isAvailable','price','notes']
-    const data_render = prepareRoomRenderData(data)
+    const Headers = ['Category','Floor','Number','Status','Price']
+    const [roomRender,setRoomRender] = useState()
     const [selected, setSelected] = useState([]);
+    useEffect(() => {
+      const dataCalling = async ()  =>{
+        try {
+            var res = await RoomApiCall.getRoomRender()
+            setRoomRender(res)
+        } 
+        catch (e){
+            console.log(e)
+        }
+    }
+    dataCalling()
+    clearAll()
+    }, [])
+    const classes = useStyles()
+    const [floor,setFloor]  = useState('')
+    const [number,setNumber]  = useState('')
+    const [roomInfo,setRoomInfo]  = useState('')
+    const [roomInfoE,setRoomInfoE]  = useState('')
+    const [openI,setOpenI]  = useState(false)
+    const clearAll = () =>{
+        setFloor('')
+        setNumber('')
+        setRoomInfoE('')
+    }
+    const searchRoom = async evt => {
+      clearAll()
+      if (floor && number){
+        var room = await RoomApiCall.getRoomByFloorNumber(floor,number)
+        setRoomInfo(room[0])
+      }
+      else {
+          setRoomInfoE('Thiếu thông tin')
+          setTimeout(()=>setRoomInfoE(''), 5000)
+        }
+      setOpenI(true)
+    };
+    const handleFloorChange = (e) => {
+          setFloor(e.target.value)
+    };
+    const handleNumberChange = (e) => {
+        setNumber(e.target.value)
+    };
+    const CloseI= ()=>{
+      setOpenI(false)
+    }
     return (
         <React.Fragment>
-          <Grid container item xs={4} sm={2}>
+          <Grid container item xs={12} sm={2}>
             <RoomSideBar  />
           </Grid>
-          <Grid container item xs={12} sm={10}>
-            <EnhancedTable data={data_render} Headers={Headers} tableName='Rooms' selected={selected} setSelected={setSelected} ></EnhancedTable>
+          <Grid container item xs={12} sm={10} className={classes.container}>
+            {
+              roomRender ?
+              <EnhancedTable data={roomRender} Headers={Headers} tableName='Rooms' selected={selected} setSelected={setSelected} ></EnhancedTable>
+              : 
+              <CircularProgress />
+            }
+              <Paper className={classes.paper}>
+                <Typography variant='h5' >Tra cứu phòng</Typography>
+                <Grid container spacing={3}>
+                  <Grid  item xs={10} sm={4}>
+                      <FormControl className={classes.formControl}>
+                          <InputLabel id="select-floor">Floor</InputLabel>
+                          <Select
+                          labelId="select-floor"
+                          id="simple-select-number"
+                          value={floor}
+                          onChange={handleFloorChange}
+                          >
+                          {
+                            [1,2,3,4,5,6,7,8,9,10].map((value)=>{
+                              return (
+                                  <MenuItem key={'selectnumber'+value+1} value={value}>{value}</MenuItem>   
+                              )
+                            })  
+                          }
+                          </Select>
+                      </FormControl>
+                  </Grid>
+                  <Grid  item xs={10} sm={4}>
+                      <FormControl className={classes.formControl}>
+                          <InputLabel id="select-number">Number</InputLabel>
+                          <Select
+                          labelId="select-number"
+                          id="simple-select-number"
+                          value={number}
+                          onChange={handleNumberChange}
+                          >
+                          {
+                            [1,2,3,4,5,6,7,8,9,10].map((value)=>{
+                              return (
+                                  <MenuItem key={'selectnumber'+value+1} value={value}>{value}</MenuItem>   
+                              )
+                            })  
+                          }
+                          </Select>
+                      </FormControl>
+                  </Grid>
+                  <Grid  item xs={10} sm={4}>
+                      <FormControl className={classes.formControl}>
+                      <Button variant="contained" color="primary" component="span" className={classes.button} onClick = {searchRoom} >
+                          Thông tin
+                      </Button>
+                      </FormControl>
+                  </Grid>
+                  {openI?
+                    <Grid container item xs={10} sm={12}>
+                      <Grid item xs={10} sm={12} className={classes.flexEnd} >
+                        <Button variant="contained" color="secondary" component="span" className={classes.button} onClick = {CloseI} >
+                            Đóng
+                        </Button>
+                      </Grid>
+                      <Grid item xs={10} sm={7}>
+                      <p><b>Mã phòng: &nbsp;</b>{roomInfo.Id_room}</p>
+                      <p><b>Lầu: &nbsp;</b>{roomInfo.Floor}</p>
+                      <p><b>Số phòng: &nbsp;</b>{roomInfo.Number}</p>
+                      </Grid>
+                      <Grid item xs={10} sm={5}>
+                      <p><b>Loại phòng: &nbsp;</b>{roomInfo.Category}</p>
+                      <p><b>Giá: &nbsp;</b>{roomInfo.Price}</p>
+                      <p><b>Trạng thái: &nbsp;</b>{roomInfo.Status === 'fasle' ? 'Đang sử dụng' : 'Còn trống' }</p>
+                      </Grid>
+                    </Grid>
+                    : roomInfoE ?
+                      <Typography style={{width:'100%',padding:'.5rem'}} align='center' color='error'>{roomInfoE}</Typography>
+                    :null
+                  }    
+                </Grid>
+              </Paper>
           </Grid>
         </React.Fragment>
     )
