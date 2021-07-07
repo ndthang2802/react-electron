@@ -4,6 +4,7 @@ import {InvoiceSideBar} from './sidebar.component'
 import { Grid,Typography,makeStyles,TextField,Box,Button,Table,TableCell,TableBody,TableHead,TableRow,Paper } from '@material-ui/core';
 import {FindInPageOutlined,ErrorOutlineOutlined,CancelPresentationOutlined,RotateLeft} from '@material-ui/icons';
 import invoiceApiCall from '../apiCall/invoice.api';
+import {SuccessInvoice,FailInvoice } from "./dialog/addBookSuccessAndFail"
 const useStyles = makeStyles(theme => ({
   center:{
     display: 'flex',
@@ -72,6 +73,8 @@ export default function Invoice(){
     const [unpaidBill,setUnpaidBill] = useState("")
     const [openBill,setOpenBill] = useState(false)
     const [billSelected,setBillSelected] = useState(false)
+    const [openDialogSuccess,setOpenDialogSuccess] =useState(false) 
+    const [openDialogFail,setOpenDialogFail] =useState(false) 
 
     const phoneChange = (e)=>{
       setError('')
@@ -115,13 +118,17 @@ export default function Invoice(){
       var res = await invoiceApiCall.PayBill(data)
       if (res.status === 204){
         console.log('pay success')
+        setOpenDialogSuccess(true)
       }
       else {
         console.log('pay fail cmnr')
+        setOpenDialogFail(true)
       }
     }
     return (
         <Grid container spacing={3}>
+          <SuccessInvoice open={openDialogSuccess} setOpen={setOpenDialogSuccess}></SuccessInvoice>
+            <FailInvoice open={openDialogFail} setOpen={setOpenDialogFail}></FailInvoice>
           <Grid item xs={12} sm={2}>
             <InvoiceSideBar  />
           </Grid>
