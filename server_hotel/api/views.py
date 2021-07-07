@@ -69,7 +69,15 @@ def UnPaidBill(request):
 @api_view(['POST'])
 def PayBill(request):
     id_rental = request.data['id_rental']
-    
+    rental = Roomrentals.objects.get(id=id_rental)
+    status_room = Status.objects.get(id = rental.room.status.id)
+    if rental and status_room:
+        rental.paid_at = datetime.datetime.now()
+        status_room.is_available = 'true'
+        rental.save()
+        status_room.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
 # Thông tin nhân viên:
 @api_view(['GET'])
 #@permission_classes([AllowAny]) # remove this 
@@ -82,7 +90,7 @@ def StaffInfo(request):
 @api_view(['GET'])
 #@permission_classes([AllowAny]) # remove this 
 def getRoomRender(request):
-    rooms = list(Rooms.objects.select_related().values(Category=F('category__name'),Floor=F('floor'),Number=F('number'),Status=F('status__is_available'),Price=F('category__price')   ))[:50]
+    rooms = list(Rooms.objects.select_related().values(Category=F('category__name'),Floor=F('floor'),Number=F('number'),Status=F('status__is_available'),Price=F('category__price'),Id_room=F('id')   ))[:50]
     return JsonResponse(rooms,safe=False)
 #-----------------------API liên quan tới room client -----------------------------#
 
@@ -152,7 +160,7 @@ def room_rentals(request):
             # cập nhật lại status phòng vừa được thuê
             this_room = list(Rooms.objects.filter(id=request.data['room']).values())
             room_status = Status.objects.get(id=this_room[0]['status_id'])
-            room_status.is_available = 'False'
+            room_status.is_available = 'false'
             room_status.save()
             return Response(room_rental_serializer.data, status=status.HTTP_201_CREATED)
         return Response(room_rental_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -206,6 +214,11 @@ def getRoomById(request,id):
     info = list(Rooms.objects.select_related().filter(id=id).values(Number=F('number'),Floor=F('floor'),Category=F('category__name'),Price=F('category__price') ))
     return JsonResponse(info,safe=False)
 
+# lấy thông tin phòng bằng số lầu, số phòng:
+@api_view(['GET'])
+def getRoomByFloorNumber(request,floor,number):
+    info = list(Rooms.objects.select_related().filter(floor=floor,number=number).values(Number=F('number'),Floor=F('floor'),Category=F('category__name'),Price=F('category__price'),Status=F('status__is_available'),Id_room=F('id') ))
+    return JsonResponse(info,safe=False)
 
 #-----------------------API liên quan tới service -----------------------------#
 
