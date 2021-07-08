@@ -70,3 +70,44 @@ python manage.py createsuperuser
 ```
 python manage.py runserver
 ```
+
+# Make App using electron-buider
+- add this line to scripts in package.json
+```
+  "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/main.js",
+```
+- add lines bellow to package.json
+```
+  "homepage": "./",
+   "build": {
+    "extends": null,
+    "appId": "com.example.ndthang",
+    "files": [
+      "dist/**/*",
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+```
+
+- Run this command:
+
+```
+npm run  electron:build
+```
+
+- If it doesn't work
+
+- > move the main.js file in clients/public/electron to folder clients/public
+- > change 
+```
+  "main": "public/electron/main.js",
+to
+  "main": "public/main.js",
+```
+
+
