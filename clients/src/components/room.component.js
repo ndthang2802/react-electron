@@ -165,7 +165,7 @@ export default function Rooms(){
                       <Grid item xs={10} sm={5}>
                       <p><b>Loại phòng: &nbsp;</b>{roomInfo.Category}</p>
                       <p><b>Giá: &nbsp;</b>{roomInfo.Price}</p>
-                      <p><b>Trạng thái: &nbsp;</b>{roomInfo.Status === 'fasle' ? 'Đang sử dụng' : 'Còn trống' }</p>
+                      <p><b>Trạng thái: &nbsp;</b>{roomInfo.Status === 'false' ? 'Đang sử dụng' : 'Còn trống' }</p>
                       </Grid>
                     </Grid>
                     : roomInfoE ?
