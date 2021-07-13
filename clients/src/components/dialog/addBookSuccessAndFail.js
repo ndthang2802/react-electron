@@ -20,9 +20,9 @@ export  function SuccessSnackbars(props) {
   const {open,setOpen} = props
   const classes = useStyles();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -47,9 +47,9 @@ export  function FailSnackbars(props) {
   const {open,setOpen} = props
   const classes = useStyles();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -75,9 +75,9 @@ export  function SuccessEditBooking(props) {
   const {open,setOpen} = props
   const classes = useStyles();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -102,9 +102,9 @@ export  function FailEditBooking(props) {
   const {open,setOpen} = props
   const classes = useStyles();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -129,9 +129,9 @@ export  function SuccessInvoice(props) {
   const {open,setOpen} = props
   const classes = useStyles();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -156,9 +156,9 @@ export  function FailInvoice(props) {
   const {open,setOpen} = props
   const classes = useStyles();
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+  // const handleClick = () => {
+  //   setOpen(true);
+  // };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {

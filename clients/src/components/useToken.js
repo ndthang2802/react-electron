@@ -1,14 +1,26 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import {getCookie} from './function/getCookie'
+const electron = window.require("electron")
 export default function useToken() {
-  const getToken = () => {
-    return getCookie('access_token')
-  };
 
-  const [token, setToken] = useState(getToken());
+  const [token, setToken] = useState();
+
+  useEffect(()=>{
+
+    const getToken = async () => {
+      var acesstoken =  await getCookie('access_token')
+      setToken(acesstoken)
+    };
+    getToken()
+
+  },[])
+
+  
 
   const saveToken = userToken => {
-    document.cookie = `access_token=${userToken};SameSite=None;Secure;`
+    const cookieJar = electron.remote.session.defaultSession.cookies;
+    var cookie = {url:'http:localhost',name : 'access_token' , value : userToken }
+    cookieJar.set(cookie)
     setToken(getCookie('access_token'));
   };
   return {

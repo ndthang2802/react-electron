@@ -1,5 +1,6 @@
-import Cookies from 'js-cookie'
 import {getCookie} from '../components/function/getCookie'
+const electron = window.require("electron")
+
 class AuthApiCall{
     async getToken(data){
         return  await fetch('http://127.0.0.1:8000/api/token/',{   // server
@@ -13,20 +14,22 @@ class AuthApiCall{
     }
 
     async refreshToken(){
+        var csrf = await getCookie("csrftoken")
         const res =  await fetch('http://127.0.0.1:8000/api/refresh_token/',{   // server
         method : 'POST',
         credentials:'include',
         headers : {
-            "X-CSRFToken": Cookies.get("csrftoken"),
+            "X-CSRFToken": csrf,
             'Content-Type' : 'application/json',
         }
         }).then(data=>data.json())
-        document.cookie = `access_token=${res['access_token']};SameSite=None;Secure;`
-
+        const cookieJar = electron.remote.session.defaultSession.cookies;
+        var cookie = {url:'http:localhost',name : 'access_token' , value : res['access_token'] }
+        cookieJar.set(cookie)
     }
 
     async getStaffInfo(){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
         var res = await fetch('http://127.0.0.1:8000/api/staff/',{
             headers:{
                 'Authorization': token,
@@ -44,12 +47,12 @@ class AuthApiCall{
     }
 
     async logOut(){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
         var res = await fetch("http://127.0.0.1:8000/api/logout/", {
               method: "POST",
               credentials: 'include',
               headers: {
-                "X-CSRFToken": Cookies.get("csrftoken"),
+                "X-CSRFToken": await getCookie("csrftoken"),
                 'Authorization': token,
                 "Content-Type": "application/json",
               }
@@ -59,8 +62,10 @@ class AuthApiCall{
             return this.logOut()
         }
         if (res.status === 200){
-            document.cookie = `access_token=;Max-Age=0;SameSite=None;Secure;`
-            window.location.reload();
+            const cookieJar = electron.remote.session.defaultSession.cookies;
+            var cookie = {url:'http:localhost',name : 'access_token' , value : '',expired : 0 }
+            cookieJar.set(cookie)
+            electron.remote.getCurrentWindow().reload()
         }
     }
 

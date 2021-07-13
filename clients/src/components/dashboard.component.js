@@ -46,7 +46,7 @@ export default function Dashboard(props){
     return (
         <Box display='flex' flexDirection='row' flexWrap='wrap' width='100%' boxShadow={2}>
             <Box width='15%' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center'>
-                <img src={logo} className={classes.logo} ></img>
+                <img alt='' src={logo} className={classes.logo} ></img>
             </Box>
             <Box id='dashboard' width='auto' display='flex' flexWrap='wrap' alignItems='center' justifyContent='center' className='hover_bottom' onClick={Clicked}>
                 <WidgetsOutlinedIcon className='negativeZIndex' />

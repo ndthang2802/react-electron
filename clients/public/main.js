@@ -1,4 +1,5 @@
 const { app, BrowserWindow} = require('electron')
+const isDev = require('electron-is-dev')
 
 
 function createWindown(){
@@ -6,15 +7,17 @@ function createWindown(){
         width:1600,
         height:1400,
         webPreferences:{
-            nodeIntegration:false,
-            allowEval: false,
+            nodeIntegration: true,
+            enableRemoteModule: true,
+            contextIsolation:false
         }
     })
-
-    win.loadURL('http:127.0.0.1:3000')
-
-    const content = win.webContents
-    console.log(content)
+    if(isDev){
+            win.loadURL('http:127.0.0.1:3000')
+        }
+    else{
+        win.loadFile('build/index.html')
+    }
     
 }
 
