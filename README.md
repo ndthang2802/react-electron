@@ -97,15 +97,7 @@ python manage.py runserver
 - Run this command:
 
 ```
+cd clients
 npm run  electron:build
 ```
 
-- If it doesn't work
-
-- > move the main.js file in clients/public/electron to folder clients/public
-- > change 
-```
-  "main": "public/electron/main.js",
-to
-  "main": "public/main.js",
-```
