@@ -1,6 +1,5 @@
 *.exe
 clients/node_modules/
-server/
 node_modules/
 SE104.L23/
 test.js
