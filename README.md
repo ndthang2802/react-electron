@@ -78,23 +78,8 @@ npm install -g electron-builder
 npm install -D eletron
 npm install electron-is-dev
 ```
-- Edit file main.js (electron)
+-  Options (edit some info about production here)
 ```
-const isDev = require('electron-is-dev')
-if(isDev){
-            win.loadURL('http:127.0.0.1:3000')
-        }
-else{
-        win.loadFile('build/index.html')
-    }
-```
-- add this line to scripts in package.json
-```
-  "electron:build": "npm run build && electron-builder -c.extraMetadata.main=build/main.js",
-```
-- add lines bellow to package.json
-```
-  "homepage": "./",
    "build": {
     "extends": null,
     "appId": "com.example.ndthang",
