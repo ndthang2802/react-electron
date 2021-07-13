@@ -2,7 +2,7 @@ import {getCookie} from '../components/function/getCookie'
 import AuthApiCall from './auth.api'
 class RoomApiCall{
     async getAllAvailableRooms(){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' +  await getCookie('access_token')
         var res =  await fetch(`http://127.0.0.1:8000/api/availablerooms/`,{
             headers:{
                 'Authorization': token,
@@ -20,7 +20,7 @@ class RoomApiCall{
         }
     }
     async getRoomById(id){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
         var res =  await fetch(`http://127.0.0.1:8000/api/room/${id}/`,{
             headers:{
                 'Authorization': token,
@@ -38,7 +38,7 @@ class RoomApiCall{
         }
     }
     async getRoomRender(){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
         var res =  await fetch(`http://127.0.0.1:8000/api/renderroom/`,{
             headers:{
                 'Authorization': token,
@@ -56,7 +56,7 @@ class RoomApiCall{
         }
     }
     async getRoomByFloorNumber(floor,number){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
         var res =  await fetch(`http://127.0.0.1:8000/api/room/${floor}/${number}/`,{
             headers:{
                 'Authorization': token,

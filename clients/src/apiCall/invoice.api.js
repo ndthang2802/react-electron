@@ -1,17 +1,17 @@
 import {getCookie} from '../components/function/getCookie'
 import AuthApiCall from './auth.api'
-import Cookies from 'js-cookie'
 
 class InvoiceApiCall {
     async getUnpaidBill(phone){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
+        var csrf = await getCookie("csrftoken")
         var res = await fetch('http://127.0.0.1:8000/api/unpaidbill/',{
             method:'POST',
             credentials: 'include',
             headers:{
                 'Authorization': token,
                 'Content-Type':'application/json',
-                "X-CSRFToken": Cookies.get("csrftoken"),
+                "X-CSRFToken": csrf,
             },
             body: JSON.stringify(phone)
         }) 
@@ -22,14 +22,15 @@ class InvoiceApiCall {
         else return res
     }
     async PayBill(id_rental){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
+        var csrf = await getCookie("csrftoken")
         var res = await fetch('http://127.0.0.1:8000/api/paybill/',{
             method:'POST',
             credentials: 'include',
             headers:{
                 'Authorization': token,
                 'Content-Type':'application/json',
-                "X-CSRFToken": Cookies.get("csrftoken"),
+                "X-CSRFToken": csrf,
             },
             body: JSON.stringify(id_rental)
         }) 

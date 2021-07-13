@@ -1,5 +1,4 @@
 import React,{useState}  from 'react';
-import EnhancedTable from './table/Table'
 import {InvoiceSideBar} from './sidebar.component'
 import { Grid,Typography,makeStyles,TextField,Box,Button,Table,TableCell,TableBody,TableHead,TableRow,Paper } from '@material-ui/core';
 import {FindInPageOutlined,ErrorOutlineOutlined,CancelPresentationOutlined,RotateLeft} from '@material-ui/icons';

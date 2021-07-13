@@ -1,10 +1,9 @@
 import {getCookie} from '../components/function/getCookie'
 import AuthApiCall from './auth.api'
-import Cookies from 'js-cookie'
 class ServiceApiCall{
     
     async getRender(){
-        var token = 'Token ' + getCookie('access_token')
+        var token = 'Token ' + await getCookie('access_token')
         var res = await fetch('http://127.0.0.1:8000/api/renderservice/',{
             headers:{
                 'Authorization': token,

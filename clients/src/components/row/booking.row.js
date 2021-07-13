@@ -138,7 +138,7 @@ export default function BookingRow(props){
             }
         }
         getMoreInfo(dup)
-    },[dup,row.phone,row.id_room])
+    },[dup,row.Phone,row.id_room])
     const onClickClose = (e) =>{
         if (e.target.parentNode.id === 'Name'){
             setClientExpanded(false)
